@@ -242,6 +242,15 @@ label.f{display:flex;flex-direction:column;gap:5px;font-size:13px;font-weight:60
 @media (max-width:860px){.toc{position:static}}
 .credit{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px;margin-top:12px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
 .credit b{color:var(--ink);font-weight:600}
+.gate{position:fixed;inset:0;z-index:100;display:grid;place-items:center;overflow:auto;background:var(--side);
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'><g fill='%23ffffff' opacity='.08'><path d='M32 7c6 8 6 17 0 25c-6-8-6-17 0-25z'/><path d='M32 57c6-8 6-17 0-25c-6 8-6 17 0 25z'/><path d='M7 32c8-6 17-6 25 0c-8 6-17 6-25 0z'/><path d='M57 32c-8-6-17-6-25 0c8 6 17 6 25 0z'/></g></svg>");
+  padding:max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px))}
+.gcard{background:var(--surface);border-radius:20px;padding:30px;width:min(440px,100%);display:flex;flex-direction:column;gap:12px;box-shadow:0 24px 70px #0006}
+.gcard h1{font-size:34px;line-height:1.1}.gcard p{margin:0;color:var(--muted)}
+.gcard input{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:13px 14px;font-size:18px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-variant-numeric:tabular-nums;color:var(--ink)}
+.gcard input:focus{border-color:var(--orange);outline:none}
+.gcard .btn{justify-content:center;padding:13px}
+.gcard label.f{margin-bottom:-6px}
 @media (max-width:1100px){.kpis,.kpis.k5{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-2,.grid-3{grid-template-columns:minmax(0,1fr)}.pos{grid-template-columns:minmax(0,1fr)}.ticket{position:static}.hero .art{width:240px}}
 @media (max-width:860px){
   .app{grid-template-columns:minmax(0,1fr)}
@@ -990,7 +999,47 @@ document.addEventListener('submit',e=>{if(e.target.id!=='cfgform')return;e.preve
 $('#fileimp').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);
   if(!o||!Array.isArray(o.ventas)||!Array.isArray(o.insumos))throw 0;S=o;cart=[];save();render();toast('Copia restaurada')}catch(x){toast('El archivo no es una copia válida de esta aplicación.')}};r.readAsText(f);e.target.value=''});
 
-load();render();
+/* ===================== Licencia (código de acceso, 1 dispositivo) ===================== */
+const LICENCIA=true;   // true en la versión publicada (GitHub)
+const API_URL='https://script.google.com/macros/s/AKfycbzkA_D82MZt03GQJXRS7hJOs3Y7zwwq8E-kMKNvLRrpmOTIH4yeYUvzIFqANryDAgFv/exec';   // URL /exec de Google Apps Script
+const LIC_KEY=KEY+'_licencia', DEV_KEY=KEY+'_dispositivo';
+function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function lsDel(k){try{localStorage.removeItem(k)}catch(e){}}
+function deviceId(){let d=lsGet(DEV_KEY);if(!d){d=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():'d-'+Date.now().toString(36)+Math.random().toString(36).slice(2,10);lsSet(DEV_KEY,d)}return d}
+async function licApi(action,code){const u=API_URL+'?action='+action+'&code='+encodeURIComponent(code)+'&device='+encodeURIComponent(deviceId())+'&t='+Date.now();
+  const r=await fetch(u,{redirect:'follow'});return r.json()}
+const LIC_ERR={invalid:'Este código no existe. Revisa que esté bien escrito.',used:'Este código ya está activado en otro dispositivo. Si has cambiado de dispositivo, escríbeme y lo libero.',
+  blocked:'Este código está desactivado. Escríbeme para más información.',net:'No se pudo conectar. Comprueba tu conexión a internet e inténtalo de nuevo.',empty:'Escribe tu código de acceso.'};
+function showGate(start,msg){
+  let g=$('#gate');if(!g){g=document.createElement('div');g.id='gate';g.className='gate';document.body.appendChild(g)}
+  g.innerHTML=`<form class="gcard" id="gform" novalidate>
+    <svg width="64" height="64" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="26" r="17" fill="#f39223"/><circle cx="24" cy="26" r="13" fill="#fbb04a"/><g stroke="#f39223" stroke-width="1.6"><path d="M24 13v26M11 26h26M15 17l18 18M33 17L15 35"/></g><circle cx="24" cy="26" r="2.4" fill="#fff4dc"/><path d="M24 9c2-5 8-7 12-6c-2 5-7 7-12 6z" fill="#3c9a4e"/></svg>
+    <div class="eyebrow">Contabilidad Cafetería</div><h1>Activa tu aplicación</h1>
+    <p>Introduce el código de acceso que recibiste tras la compra. Cada código funciona en un solo dispositivo.</p>
+    <label class="f" for="gcode">Código de acceso</label><input id="gcode" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="CAFE-XXXX-XXXX">
+    <div class="ferr" id="gerr">${msg||''}</div>
+    <button class="btn pri" type="submit" id="gbtn">Activar</button>
+    <p class="sub">¿Aún no tienes código? Escríbeme por mensaje privado para conseguir la aplicación.</p>
+    <div class="sub">Creado por <b>Halyna Haidai</b> · ai.lab.creative</div></form>`;
+  g.hidden=false;setTimeout(()=>$('#gcode').focus(),50);
+  $('#gform').addEventListener('submit',async e=>{e.preventDefault();const code=$('#gcode').value.trim().toUpperCase().replace(/\s+/g,'');
+    if(!code){$('#gerr').textContent=LIC_ERR.empty;return}
+    const b=$('#gbtn');b.disabled=true;b.textContent='Comprobando…';$('#gerr').textContent='';
+    try{const r=await licApi('activate',code);
+      if(r&&r.ok){lsSet(LIC_KEY,JSON.stringify({code,fecha:today()}));g.hidden=true;g.innerHTML='';start()}
+      else{$('#gerr').textContent=LIC_ERR[r&&r.error]||LIC_ERR.invalid;b.disabled=false;b.textContent='Activar'}}
+    catch(x){$('#gerr').textContent=LIC_ERR.net;b.disabled=false;b.textContent='Activar'}});
+}
+function licenseGate(start){
+  if(!LICENCIA){start();return}
+  let lic=null;try{lic=JSON.parse(lsGet(LIC_KEY)||'null')}catch(e){}
+  if(!lic||!lic.code){showGate(start);return}
+  start();
+  licApi('check',lic.code).then(r=>{if(r&&r.ok===false){lsDel(LIC_KEY);document.querySelector('.app').hidden=true;
+    showGate(()=>{document.querySelector('.app').hidden=false;load();render()},r.error==='blocked'?LIC_ERR.blocked:'Tu licencia ya no es válida en este dispositivo. Introduce de nuevo tu código.')}}).catch(()=>{});
+}
+licenseGate(()=>{load();render()});
 </script>
 
 </body>
