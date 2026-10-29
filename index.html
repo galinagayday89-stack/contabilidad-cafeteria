@@ -1,0 +1,983 @@
+<title>Contabilidad Cafetería</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="author" content="Halyna Haidai (Галина Гайдай) · ai.lab.creative">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: barra lateral azul cobalto con azulejos valencianos + área de trabajo crema con tarjetas; naranja como acento */
+:root{
+  --bg:#f6f1e7; --surface:#fffdf9; --surface-2:#f0e9da; --ink:#1b2340; --muted:#676c80; --line:#e3dac7;
+  --side:#1d3fae; --side-ink:#eef2ff; --side-muted:#b9c6f2; --side-active:#ffffff22;
+  --orange:#e8740f; --orange-ink:#ffffff; --orange-soft:#fde4c8; --orange-mute:#f3c493;
+  --cobalt:#1d3fae; --blue-soft:#e1e7fa;
+  --green:#1d8048; --green-soft:#d9efe0; --amber:#a86f00; --amber-soft:#f8ebc6; --red:#b8392a; --red-soft:#f7dcd5;
+  --shadow:0 1px 2px #1b234012, 0 6px 20px #1b23400d;
+  --f-display:"DM Serif Display", Georgia, "Times New Roman", serif;
+  --f-body:"Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1428; --surface:#171f3d; --surface-2:#1e284c; --ink:#edf0f8; --muted:#a2a9c4; --line:#2a3561;
+  --side:#13267a; --side-ink:#eef2ff; --side-muted:#a9b8ec; --side-active:#ffffff1f;
+  --orange:#f5963a; --orange-ink:#1b1206; --orange-soft:#3b2814; --orange-mute:#7a4e22;
+  --cobalt:#8ba3f5; --blue-soft:#1d2b5e;
+  --green:#5cc98a; --green-soft:#14352a; --amber:#e8b84a; --amber-soft:#3a2f12; --red:#f08270; --red-soft:#3d1d19;
+  --shadow:0 1px 2px #0006, 0 6px 20px #0004; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1428; --surface:#171f3d; --surface-2:#1e284c; --ink:#edf0f8; --muted:#a2a9c4; --line:#2a3561;
+  --side:#13267a; --side-ink:#eef2ff; --side-muted:#a9b8ec; --side-active:#ffffff1f;
+  --orange:#f5963a; --orange-ink:#1b1206; --orange-soft:#3b2814; --orange-mute:#7a4e22;
+  --cobalt:#8ba3f5; --blue-soft:#1d2b5e;
+  --green:#5cc98a; --green-soft:#14352a; --amber:#e8b84a; --amber-soft:#3a2f12; --red:#f08270; --red-soft:#3d1d19;
+  --shadow:0 1px 2px #0006, 0 6px 20px #0004; color-scheme:dark}
+
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45}
+*{box-sizing:border-box}
+button,input,select,textarea{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--f-display);font-weight:400;margin:0;text-wrap:balance;letter-spacing:.005em}
+.num,td.n,.kpi .v{font-variant-numeric:tabular-nums}
+:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+
+.app{display:grid;grid-template-columns:268px minmax(0,1fr);min-height:100%}
+.side{background:var(--side);color:var(--side-ink);position:sticky;top:0;height:100vh;height:100dvh;display:flex;flex-direction:column;
+  padding-block:24px 0;padding-left:max(14px, env(safe-area-inset-left, 0px));padding-right:14px;overflow:hidden}
+.brand{display:flex;gap:12px;align-items:center;padding:0 8px 22px}
+.brand svg{flex:none}
+.brand b{display:block;font-family:var(--f-display);font-size:22px;line-height:1.1;font-weight:400}
+.brand small{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--side-muted);margin-top:3px}
+.nav{display:flex;flex-direction:column;gap:3px}
+.nav a{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:11px;color:var(--side-ink);text-decoration:none;font-weight:500;font-size:15px}
+.nav a:hover{background:#ffffff14}
+.nav a.on{background:var(--orange);color:var(--orange-ink);box-shadow:0 4px 14px #0003}
+.nav svg{width:21px;height:21px;flex:none}
+.tiles{margin-top:auto;height:150px;margin-left:calc(-1 * max(14px, env(safe-area-inset-left, 0px)));margin-right:-14px;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f4efe4'/><g fill='%231d3fae'><path d='M32 7c6 8 6 17 0 25c-6-8-6-17 0-25z'/><path d='M32 57c6-8 6-17 0-25c-6 8-6 17 0 25z'/><path d='M7 32c8-6 17-6 25 0c-8 6-17 6-25 0z'/><path d='M57 32c-8-6-17-6-25 0c8 6 17 6 25 0z'/></g><circle cx='32' cy='32' r='4.5' fill='%23e8740f'/><g fill='%23e8740f'><path d='M0 0h11A11 11 0 0 1 0 11z'/><path d='M64 0v11A11 11 0 0 1 53 0z'/><path d='M0 64V53A11 11 0 0 1 11 64z'/><path d='M64 64H53A11 11 0 0 1 64 53z'/></g><g fill='%231d3fae' opacity='.55'><circle cx='16' cy='16' r='2'/><circle cx='48' cy='16' r='2'/><circle cx='16' cy='48' r='2'/><circle cx='48' cy='48' r='2'/></g></svg>");
+  background-size:64px 64px;-webkit-mask-image:linear-gradient(to top,#000 40%,transparent);mask-image:linear-gradient(to top,#000 40%,transparent);opacity:.95}
+
+main{min-width:0;padding-block:26px 48px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.wrap{max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+.head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px}
+.head h1{font-size:clamp(30px,4vw,42px);line-height:1.05}
+.head p{margin:4px 0 0;color:var(--muted)}
+.eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.actions{display:flex;flex-wrap:wrap;gap:10px}
+
+.btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);padding:10px 16px;border-radius:11px;cursor:pointer;font-weight:600;text-decoration:none;color:var(--ink);white-space:nowrap}
+.btn:hover{border-color:var(--orange)}
+.btn svg{width:18px;height:18px}
+.btn.pri{background:var(--orange);border-color:var(--orange);color:var(--orange-ink);box-shadow:0 4px 14px #e8740f40}
+.btn.pri:hover{filter:brightness(1.05)}
+.btn.blue{background:var(--side);border-color:var(--side);color:#fff}
+.btn.danger{background:var(--red);border-color:var(--red);color:#fff}
+.btn.sm{padding:6px 10px;font-size:13px;border-radius:9px}
+.ib{display:inline-grid;place-items:center;width:32px;height:32px;border-radius:9px;border:1px solid transparent;background:transparent;cursor:pointer;color:var(--muted)}
+.ib:hover{background:var(--surface-2);color:var(--ink)}
+.ib svg{width:17px;height:17px}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:20px;min-width:0}
+.card h2{font-size:22px}
+.card .ch{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.card .sub{color:var(--muted);font-size:13px}
+
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.kpis.k3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.kpis.k5{grid-template-columns:repeat(5,minmax(0,1fr))}
+.kpi{border-radius:var(--r);padding:18px;display:flex;gap:14px;align-items:flex-start;border:1px solid var(--line);background:var(--surface);min-width:0}
+.kpi .ic{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;flex:none}
+.kpi .ic svg{width:22px;height:22px}
+.kpi .l{font-size:13.5px;color:var(--muted);font-weight:500}
+.kpi .v{font-family:var(--f-display);font-size:30px;line-height:1.1;margin-top:2px;overflow-wrap:anywhere}
+.kpi .t{font-size:12.5px;color:var(--muted);margin-top:4px}
+.k-or{background:var(--orange-soft);border-color:transparent}.k-or .ic{background:var(--orange);color:var(--orange-ink)}
+.k-gr{background:var(--green-soft);border-color:transparent}.k-gr .ic{background:var(--green);color:var(--surface)}
+.k-bl{background:var(--blue-soft);border-color:transparent}.k-bl .ic{background:var(--cobalt);color:var(--surface)}
+.k-am{background:var(--amber-soft);border-color:transparent}.k-am .ic{background:var(--amber);color:var(--surface)}
+.up{color:var(--green);font-weight:700}.down{color:var(--red);font-weight:700}
+
+.hero{position:relative;border-radius:18px;overflow:hidden;background:var(--surface);border:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px}
+.hero .txt{padding:26px 28px;display:flex;flex-direction:column;gap:10px}
+.hero h1{font-size:clamp(32px,4.4vw,48px);line-height:1.02}
+.hero .date{color:var(--muted);font-size:16px}
+.hero .art{align-self:stretch;width:340px;position:relative}
+.hero .art svg{position:absolute;right:0;bottom:0;height:100%;width:auto}
+.script{font-family:var(--f-display);font-style:italic;color:var(--cobalt)}
+
+.grid-2{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:16px}
+.grid-2e{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+
+.tbl{overflow-x:auto;margin:0 -4px}
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+th{text-align:left;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:10px 10px;background:var(--surface-2);white-space:nowrap}
+th:first-child{border-radius:9px 0 0 9px}th:last-child{border-radius:0 9px 9px 0}
+td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+td.n,th.n{text-align:right;white-space:nowrap}
+td.act{white-space:nowrap;text-align:right;width:1%}
+.prod{display:flex;align-items:center;gap:10px;font-weight:600}
+.av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:14px;flex:none}
+.c0{background:var(--orange-soft);color:var(--orange)}.c1{background:var(--blue-soft);color:var(--cobalt)}.c2{background:var(--green-soft);color:var(--green)}
+.c3{background:var(--amber-soft);color:var(--amber)}.c4{background:var(--red-soft);color:var(--red)}.c5{background:var(--surface-2);color:var(--muted)}
+
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:99px;font-size:12.5px;font-weight:600;white-space:nowrap;border:0}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.p-ok{background:var(--green-soft);color:var(--green)}.p-warn{background:var(--amber-soft);color:var(--amber)}.p-bad{background:var(--red-soft);color:var(--red)}.p-info{background:var(--blue-soft);color:var(--cobalt)}
+button.pill{cursor:pointer}
+.tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:12px;font-weight:600;background:var(--surface-2);color:var(--muted)}
+.tag.in{background:var(--green-soft);color:var(--green)}.tag.out{background:var(--red-soft);color:var(--red)}
+
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--surface);padding:7px 13px;border-radius:99px;cursor:pointer;font-size:13.5px;font-weight:600;color:var(--muted)}
+.chip.on{background:var(--side);border-color:var(--side);color:#fff}
+.tabs{display:flex;gap:4px;background:var(--surface-2);padding:4px;border-radius:12px;width:max-content;max-width:100%;overflow-x:auto}
+.tab{border:0;background:transparent;padding:8px 16px;border-radius:9px;cursor:pointer;font-weight:600;color:var(--muted);white-space:nowrap}
+.tab.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+
+.search{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:0 12px;min-width:0;flex:1 1 220px;max-width:420px}
+.search svg{width:18px;height:18px;color:var(--muted);flex:none}
+.search input{border:0;background:transparent;padding:10px 0;outline:none;width:100%;min-width:0}
+
+.list{display:flex;flex-direction:column}
+.li{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.li:last-child{border-bottom:0}
+.li .grow{flex:1;min-width:0}
+.li .grow b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.li .grow span{font-size:12.5px;color:var(--muted)}
+.li .r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.li .r small{display:block;color:var(--muted);font-size:12px}
+.empty{color:var(--muted);text-align:center;padding:28px 10px;font-size:14px}
+
+.note{display:flex;gap:12px;align-items:center;background:var(--green-soft);border-radius:12px;padding:12px 14px;margin-top:14px;font-size:14px}
+.note svg{width:22px;height:22px;color:var(--green);flex:none}
+
+.banner{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between;background:var(--blue-soft);color:var(--ink);border-radius:12px;padding:10px 14px;font-size:14px}
+.banner b{color:var(--cobalt)}
+
+/* Caja */
+.pos{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}
+.menu{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:14px}
+.mi{border:1px solid var(--line);background:var(--surface);border-radius:13px;padding:14px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:8px;min-height:104px;transition:transform .12s,border-color .12s}
+.mi:hover{border-color:var(--orange);transform:translateY(-1px)}
+.mi:active{transform:scale(.98)}
+.mi b{font-weight:600;line-height:1.25}
+.mi .pr{margin-top:auto;font-family:var(--f-display);font-size:20px;color:var(--orange)}
+.ticket{position:sticky;top:16px}
+.tl{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px dashed var(--line)}
+.tl .grow{flex:1;min-width:0}
+.tl .grow b{display:block;font-weight:600;font-size:14px}
+.tl .grow span{font-size:12.5px;color:var(--muted)}
+.qty{display:flex;align-items:center;gap:4px}
+.qty button{width:28px;height:28px;border-radius:8px;border:1px solid var(--line);background:var(--surface-2);cursor:pointer;font-weight:700;line-height:1}
+.qty span{min-width:22px;text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
+.ttot{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px}
+.ttot .v{font-family:var(--f-display);font-size:34px}
+.pay{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.pay button{padding:12px 6px;border-radius:11px;border:0;background:var(--orange);color:var(--orange-ink);font-weight:700;cursor:pointer}
+.pay button:disabled{opacity:.4;cursor:not-allowed}
+.pay button:hover:not(:disabled){filter:brightness(1.06)}
+
+/* Proveedores */
+.provs{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+.prov dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 12px;margin:12px 0 0;font-size:14px}
+.prov dt{color:var(--muted)}
+.prov dd{margin:0;overflow-wrap:anywhere}
+.prov .foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+
+/* Barras horizontales */
+.hb{display:grid;grid-template-columns:minmax(90px,150px) minmax(0,1fr) auto;gap:10px;align-items:center;font-size:14px;padding:6px 0}
+.hb .bar{height:10px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.hb .bar i{display:block;height:100%;border-radius:99px;background:var(--cobalt)}
+.legend{display:flex;gap:16px;font-size:13px;color:var(--muted);flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+svg.chart{width:100%;height:auto;display:block}
+svg.chart text{fill:var(--muted);font-family:var(--f-body);font-size:12px}
+
+/* Formularios */
+.form{display:flex;flex-direction:column;gap:14px}
+.fg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+label.f{display:flex;flex-direction:column;gap:5px;font-size:13px;font-weight:600;color:var(--muted);min-width:0}
+.f input,.f select,.f textarea,.l-row input,.l-row select{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 11px;font-weight:500;color:var(--ink);width:100%;min-width:0}
+.f input:focus,.f select:focus,.f textarea:focus,.l-row input:focus,.l-row select:focus{border-color:var(--orange);outline:none}
+.ferr{color:var(--red);font-size:13.5px;font-weight:600;min-height:1em}
+.l-row{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,.8fr) minmax(0,1fr) minmax(0,.8fr) 32px;gap:8px;align-items:center}
+.l-head{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.sumbox{background:var(--surface-2);border-radius:11px;padding:12px 14px;display:flex;gap:20px;justify-content:flex-end;flex-wrap:wrap;font-variant-numeric:tabular-nums}
+.sumbox b{font-size:17px}
+
+.modal{position:fixed;inset:0;background:#0b1024a6;display:grid;place-items:center;z-index:50;padding:max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px))}
+.sheet{background:var(--surface);border-radius:18px;width:min(560px,100%);max-height:100%;overflow:auto;padding:22px;box-shadow:0 20px 60px #0005}
+.sheet.wide{width:min(820px,100%)}
+.sheet .mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:12px}
+.sheet h3{font-size:24px}
+.mf{display:flex;justify-content:flex-end;gap:10px;margin-top:6px;flex-wrap:wrap}
+.toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom, 0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:12px;font-weight:600;z-index:60;box-shadow:0 10px 30px #0004;max-width:calc(100% - 32px)}
+
+.r-row{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) 34px 32px;gap:8px;align-items:center}
+.r-u{font-size:13px;color:var(--muted);font-weight:600}
+.guide{display:flex;flex-direction:column;gap:16px;max-width:900px}
+.toc{position:sticky;top:12px;z-index:2}
+.gs{scroll-margin-top:110px;display:flex;flex-direction:column;gap:12px}
+.gs h2{font-size:28px}
+.gs p{margin:0;max-width:68ch}
+.steps{margin:0;padding:0;list-style:none;counter-reset:st;display:flex;flex-direction:column;gap:10px;max-width:72ch}
+.steps li{counter-increment:st;display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:start}
+.steps li::before{content:counter(st);width:28px;height:28px;border-radius:50%;background:var(--side);color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px}
+.dots{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.tip{background:var(--orange-soft);border-radius:11px;padding:11px 14px;font-size:14px;max-width:72ch}
+.flow{display:flex;flex-wrap:wrap;gap:8px}
+.flow span{display:inline-flex;align-items:center;gap:8px;background:var(--surface-2);border-radius:99px;padding:6px 14px 6px 6px;font-weight:600;font-size:14px}
+.flow b{width:24px;height:24px;border-radius:50%;background:var(--orange);color:var(--orange-ink);display:grid;place-items:center;font-size:12px}
+.faq{margin:0;display:flex;flex-direction:column;gap:4px}
+.faq dt{font-weight:700;margin-top:8px}.faq dd{margin:0;color:var(--muted)}
+@media (max-width:860px){.toc{position:static}}
+.credit{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px;margin-top:12px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+.credit b{color:var(--ink);font-weight:600}
+@media (max-width:1100px){.kpis,.kpis.k5{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-2,.grid-3{grid-template-columns:minmax(0,1fr)}.pos{grid-template-columns:minmax(0,1fr)}.ticket{position:static}.hero .art{width:240px}}
+@media (max-width:860px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .side{position:static;height:auto;padding-block:14px 10px;padding-right:max(14px, env(safe-area-inset-right, 0px))}
+  .brand{padding-bottom:12px}
+  .nav{flex-direction:row;overflow-x:auto;gap:6px;margin:0 -4px;padding:0 4px 4px}
+  .nav a{white-space:nowrap;padding:8px 12px;font-size:14px}
+  .tiles{display:none}
+  .grid-2e{grid-template-columns:minmax(0,1fr)}
+  .hero{grid-template-columns:minmax(0,1fr)}.hero .art{display:none}
+}
+@media (max-width:560px){
+  .kpis,.kpis.k3,.kpis.k5{grid-template-columns:minmax(0,1fr)}
+  .fg{grid-template-columns:minmax(0,1fr)}
+  .l-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 32px}
+  .l-row .l-ins{grid-column:1 / -1}
+  .l-head{display:none}
+  .kpi .v{font-size:26px}
+  .hero .txt{padding:20px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <svg width="46" height="46" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="26" r="17" fill="#f39223"/><circle cx="24" cy="26" r="13" fill="#fbb04a"/><g stroke="#f39223" stroke-width="1.6"><path d="M24 13v26M11 26h26M15 17l18 18M33 17L15 35"/></g><circle cx="24" cy="26" r="2.4" fill="#fff4dc"/><path d="M24 9c2-5 8-7 12-6c-2 5-7 7-12 6z" fill="#3c9a4e"/><path d="M24 9c-1-3-4-5-7-5" stroke="#3c9a4e" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+      <div><b id="bname">Tu cafetería</b><small id="bsub">Contabilidad</small></div>
+    </div>
+    <nav class="nav" id="nav"></nav>
+    <div class="tiles" aria-hidden="true"></div>
+  </aside>
+  <main><div class="wrap" id="view"></div></main>
+</div>
+
+<div class="modal" id="modal" hidden>
+  <form class="sheet" id="mform" novalidate>
+    <div class="mh"><h3 id="mtitle">Título</h3><button type="button" class="ib" data-act="close" aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div id="mbody"></div>
+    <div class="ferr" id="merr"></div>
+    <div class="mf"><button type="button" class="btn" data-act="close">Cancelar</button><button type="submit" class="btn pri" id="msubmit">Guardar</button></div>
+  </form>
+</div>
+<div class="toast" id="toast" hidden></div>
+<input type="file" id="fileimp" accept="application/json,.json" hidden>
+
+<script>
+/* ===================== Utilidades ===================== */
+const KEY='cafeteria_contabilidad_v1';
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const uid=()=>Math.random().toString(36).slice(2,10);
+const pad=n=>String(n).padStart(2,'0');
+const iso=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const today=()=>iso(new Date());
+const addDays=(s,n)=>{const d=new Date(s+'T12:00:00');d.setDate(d.getDate()+n);return iso(d)};
+const nowTime=()=>{const d=new Date();return pad(d.getHours())+':'+pad(d.getMinutes())};
+const MESES=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const MES_C=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const DIAS=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+const DIAS_C=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+const fdate=s=>{if(!s)return'';const[y,m,d]=s.split('-');return d+'/'+m+'/'+y};
+const wday=s=>new Date(s+'T12:00:00').getDay();
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num=v=>{v=String(v??'').trim().replace(/\s|€/g,'');if(v.includes(','))v=v.replace(/\./g,'').replace(',','.');const n=parseFloat(v);return isFinite(n)?n:0};
+const r2=n=>Math.round((n+Number.EPSILON)*100)/100;
+function grp(i){return i.replace(/\B(?=(\d{3})+(?!\d))/g,'.')}
+function eur(n){const neg=n<0;const s=Math.abs(r2(n)).toFixed(2).split('.');return (neg?'−':'')+grp(s[0])+','+s[1]+' €'}
+function eur0(n){const neg=n<0;return (neg?'−':'')+grp(String(Math.round(Math.abs(n))))+' €'}
+function qn(n){return String(Math.round(n*1000)/1000).replace('.',',')}
+const pct=n=>(Math.round(n*10)/10).toString().replace('.',',')+' %';
+const sum=(a,f)=>a.reduce((s,x)=>s+f(x),0);
+const inR=(f,a,b)=>f>=a&&f<=b;
+const ym=s=>s.slice(0,7);
+const catIdx=c=>{let h=0;for(const ch of String(c))h=(h*31+ch.charCodeAt(0))>>>0;return 'c'+(h%6)};
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+
+/* ===================== Iconos ===================== */
+const I=(p,sw=1.8)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+const IC={
+ panel:I('<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/>'),
+ ventas:I('<path d="M5 20V12M12 20V5M19 20v-6"/>',2.2),
+ recepcion:I('<path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/>'),
+ inventario:I('<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 3h6v3H9zM9 11h6M9 15h4"/>'),
+ gastos:I('<path d="M3 7h15a3 3 0 0 1 3 3v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M3 7l12-3v3"/><circle cx="16.5" cy="13.5" r="1.2"/>'),
+ proveedores:I('<path d="M2 6h11v10H2zM13 9h4l4 4v3h-8"/><circle cx="6" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>'),
+ informes:I('<path d="M6 3h9l4 4v14H6z"/><path d="M9 17v-3M12 17v-6M15 17v-4"/>'),
+ configuracion:I('<path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>'),
+ guia:I('<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5M9 7h6M9 11h6"/>'),
+ plus:I('<path d="M12 5v14M5 12h14"/>',2.2), edit:I('<path d="M4 20h4L19 9l-4-4L4 16z"/>'), trash:I('<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>'),
+ search:I('<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>'), alert:I('<path d="M12 3l10 18H2z"/><path d="M12 10v4M12 17.5v.5"/>',2),
+ cart:I('<circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l3 12h11l2-8H6.5"/>'),
+ coins:I('<ellipse cx="9" cy="6" rx="6" ry="3"/><path d="M3 6v4c0 1.7 2.7 3 6 3s6-1.3 6-3V6"/><path d="M9 13v4c0 1.7 2.7 3 6 3s6-1.3 6-3v-4c0-1.7-2.7-3-6-3"/>'),
+ euro:I('<path d="M18 6.5A7 7 0 1 0 18 17.5"/><path d="M4 10h9M4 14h9"/>',2), cup:I('<path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M17 10h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M8 3c0 2 2 2 2 4M12 3c0 2 2 2 2 4"/>'),
+ out:I('<path d="M12 4v12M7 11l5 5 5-5"/><path d="M5 20h14"/>'), down:I('<path d="M12 4v14M6 12l6 6 6-6"/>'), upl:I('<path d="M12 20V6M6 12l6-6 6 6"/>'), copy:I('<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/>'),
+ trend:I('<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',2.2), trendd:I('<path d="M3 7l6 6 4-4 8 8"/><path d="M15 17h6v-6"/>',2.2)
+};
+const NAV=[['panel','Panel principal'],['ventas','Ventas'],['recepcion','Recepción de mercancías'],['inventario','Inventario'],['gastos','Gastos'],['proveedores','Proveedores'],['informes','Informes'],['configuracion','Configuración'],['guia','Guía de uso']];
+
+/* ===================== Datos ===================== */
+const ivaOpc=()=>(S&&S.settings&&S.settings.ivas&&S.settings.ivas.length?S.settings.ivas:[21,10,4,0]);
+const CAT_GASTO=['Alquiler','Suministros (luz, agua, gas)','Salarios','Seguridad Social','Gestoría','Teléfono e internet','Mantenimiento','Seguros','Otros'];
+const PAGOS=['Efectivo','Tarjeta','Bizum'];
+const PAGO_GASTO=['Transferencia','Domiciliación','Tarjeta','Efectivo'];
+const UNIDADES=['kg','L','uds','paquetes','cajas'];
+const ESTADOS=['Recibido','Pendiente de pago','Pagado'];
+let S;
+
+function seed(){
+  const rnd=mulberry32(20261029), t=today();
+  const ins={};
+  const insDef=[['cafe','Café en grano','Cafés','kg',9,4,16.5,10],['leche','Leche entera','Lácteos','L',12,15,0.92,4],['avena','Bebida de avena','Lácteos','L',6,3,1.65,10],['nata','Nata para montar','Lácteos','L',2.5,1,4.2,10],
+   ['cacao','Cacao en polvo','Alimentación','kg',1.8,0.8,7.9,10],['azucar','Azúcar en sobres','Alimentación','kg',3,4,1.15,10],['te','Té e infusiones (bolsitas)','Cafés','uds',90,40,0.09,10],
+   ['naranjas','Naranjas','Frutas y verduras','kg',22,12,1.1,4],['tomates','Tomates','Frutas y verduras','kg',5,3,1.6,4],['aceite','Aceite de oliva','Alimentación','L',4,2,8.9,4],
+   ['mantequilla','Mantequilla','Lácteos','kg',1.5,0.5,9.2,10],['mermelada','Mermelada','Alimentación','kg',2,0.8,5.4,10],['pan','Pan (barra)','Panadería','uds',14,10,0.45,4],
+   ['croissants','Croissants','Panadería','uds',28,20,0.38,10],['magdalenas','Magdalenas','Panadería','uds',30,20,0.22,10],['jamon','Jamón serrano','Charcutería','kg',1.2,1.5,21,10],
+   ['cerveza','Cerveza (barril)','Bebidas','L',34,20,2.1,21],['vino','Vino tinto','Bebidas','L',8,4,3.6,21],['agua','Agua mineral (botella)','Bebidas','uds',40,24,0.30,10],['vasos','Vasos para llevar','Desechables','uds',260,100,0.05,21]];
+  const insumos=insDef.map(([k,nombre,cat,unidad,stock,min,coste,iva])=>{const o={id:uid(),nombre,cat,unidad,stock,min,coste,iva};ins[k]=o;return o});
+  const R=(...p)=>p.map(([k,q])=>({insumoId:ins[k].id,cant:r4(q/rFac(ins[k].unidad))}));
+  const carta=[
+   ['Café solo','Cafés',1.30,6,R(['cafe',8],['azucar',7])],['Cortado','Cafés',1.40,6,R(['cafe',8],['leche',40],['azucar',7])],
+   ['Café con leche','Cafés',1.70,10,R(['cafe',8],['leche',150],['azucar',7])],['Café con leche de avena','Cafés',1.90,2,R(['cafe',8],['avena',150],['azucar',7])],
+   ['Capuchino','Cafés',2.20,3,R(['cafe',8],['leche',120],['cacao',2])],['Café vienés','Cafés',2.40,1.5,R(['cafe',8],['nata',40],['cacao',1])],
+   ['Chocolate caliente','Cafés',2.50,2,R(['leche',200],['cacao',25],['azucar',10])],['Té o infusión','Cafés',1.60,2,R(['te',1])],
+   ['Zumo de naranja natural','Bebidas',2.90,4,R(['naranjas',400])],['Agua mineral','Bebidas',1.50,3,R(['agua',1])],
+   ['Croissant','Bollería',1.60,5,R(['croissants',1])],['Magdalena','Bollería',1.20,2,R(['magdalenas',1])],
+   ['Tostada con tomate y aceite','Tostadas y bocadillos',2.40,4,R(['pan',.5],['tomates',60],['aceite',15])],['Tostada con mantequilla y mermelada','Tostadas y bocadillos',2.20,2,R(['pan',.5],['mantequilla',15],['mermelada',20])],
+   ['Bocadillo de jamón','Tostadas y bocadillos',4.50,3,R(['pan',1],['jamon',60])],['Desayuno completo','Tostadas y bocadillos',5.50,2,R(['cafe',8],['leche',150],['azucar',7],['naranjas',400],['pan',.5],['tomates',60],['aceite',15])],
+   ['Caña de cerveza','Con alcohol',1.90,3,R(['cerveza',200])],['Copa de vino','Con alcohol',2.80,1,R(['vino',150])]]
+   .map(([nombre,cat,precio,w,receta])=>({id:uid(),nombre,cat,precio,iva:10,w,receta}));
+  const P=(nombre,nif,tel,email,dir,productos)=>({id:uid(),nombre,nif,tel,email,dir,productos});
+  const prov={tost:P('Tostadero Central','B12345601','900 111 201','pedidos@tostaderocentral.es','Calle del Comercio 18','Café, cacao, azúcar, té'),
+    lact:P('Lácteos del Valle','B12345602','900 111 202','info@lacteosdelvalle.es','Avenida de la Industria 5','Leche, bebida de avena, nata, mantequilla'),
+    frut:P('Frutas y Verduras El Mercado','B12345603','900 111 203','pedidos@elmercado.es','Mercado Municipal, puesto 112','Naranjas, tomates, aceite, mermelada'),
+    horno:P('Horno La Espiga','B12345604','900 111 204','horno@laespiga.es','Calle Mayor 77','Pan, croissants, magdalenas'),
+    dist:P('Distribuciones Hostelería Sur','B12345605','900 111 205','ventas@disthosteleria.es','Polígono Industrial Norte, nave 3','Jamón, cerveza, vino, agua, vasos')};
+  const proveedores=Object.values(prov);
+  const ventas=[], tot=sum(carta,c=>c.w), nowH=new Date().getHours();
+  const pick=()=>{let x=rnd()*tot;for(const c of carta){x-=c.w;if(x<=0)return c}return carta[0]};
+  for(let d=59;d>=0;d--){
+    const f=addDays(t,-d), wd=wday(f), base=(wd===0||wd===6)?58:46, nt=Math.round(base*(.85+rnd()*.3));
+    const hrs=[];for(let i=0;i<nt;i++){const h=7+Math.floor(Math.pow(rnd(),1.25)*13);hrs.push(h*60+Math.floor(rnd()*60))}hrs.sort((a,b)=>a-b);
+    for(const m of hrs){
+      const h=Math.floor(m/60); if(d===0&&h>=nowH)continue;
+      const n=1+Math.floor(rnd()*3), items=[], used=new Set();
+      for(let k=0;k<n;k++){const c=pick();if(used.has(c.id))continue;used.add(c.id);const r=rnd();items.push({cid:c.id,nombre:c.nombre,cant:r<.6?1:r<.9?2:3,precio:c.precio,iva:c.iva})}
+      const r=rnd();ventas.push({id:uid(),fecha:f,hora:pad(h)+':'+pad(m%60),items,pago:r<.55?'Tarjeta':r<.86?'Efectivo':'Bizum'});
+    }
+  }
+  const entradas=[], movimientos=[]; let alb=2041;
+  const ent=(f,p,lines,d)=>{const e={id:uid(),fecha:f,proveedorId:p.id,albaran:'ALB-'+(alb++),lineas:lines.map(([k,c])=>({insumoId:ins[k].id,nombre:ins[k].nombre,cant:c,coste:ins[k].coste,iva:ins[k].iva})),
+     estado:d===0?'Recibido':(d<=9&&(p===prov.dist||p===prov.tost))?'Pendiente de pago':'Pagado'};entradas.push(e);
+     e.lineas.forEach(l=>movimientos.push({id:uid(),fecha:f,hora:pad(7+Math.floor(rnd()*2))+':'+pad(Math.floor(rnd()*60)),insumoId:l.insumoId,nombre:l.nombre,tipo:'entrada',cant:l.cant,motivo:'Albarán '+e.albaran}))};
+  for(let d=55;d>=0;d--){const f=addDays(t,-d),w=wday(f);
+    if(w===1)ent(f,prov.tost,[['cafe',5],['azucar',5],['cacao',1],['te',100]],d);
+    if(w===1||w===4)ent(f,prov.lact,w===1?[['leche',40],['avena',6],['nata',2],['mantequilla',1]]:[['leche',40]],d);
+    if(w===2||w===5)ent(f,prov.frut,w===2?[['naranjas',35],['tomates',6],['aceite',5],['mermelada',2]]:[['naranjas',35],['tomates',6]],d);
+    if(w===1||w===3||w===5)ent(f,prov.horno,[['pan',25],['croissants',40],['magdalenas',20]],d);
+    if(w===3)ent(f,prov.dist,[['jamon',2],['cerveza',30],['vino',6],['agua',48],['vasos',300]],d);
+  }
+  [['leche',2,'Merma o caducado'],['croissants',4,'Merma o caducado'],['pan',3,'Merma o caducado']].forEach(([k,c,m],i)=>
+    movimientos.push({id:uid(),fecha:addDays(t,-1-i),hora:'21:'+pad(10*i),insumoId:ins[k].id,nombre:ins[k].nombre,tipo:'salida',cant:c,motivo:m}));
+  const gastos=[], td=new Date(t+'T12:00:00');
+  for(let k=2;k>=0;k--){const mm=new Date(td.getFullYear(),td.getMonth()-k,1),Y=mm.getFullYear(),M=mm.getMonth()+1,F=d=>Y+'-'+pad(M)+'-'+pad(d);
+    const g=(d,concepto,cat,base,iva,pago)=>{const f=F(d);if(f<=t)gastos.push({id:uid(),fecha:f,concepto,cat,base:r2(base),iva,pago})};
+    g(1,'Alquiler del local','Alquiler',1100,21,'Transferencia');
+    g(3,'Cuota mensual gestoría','Gestoría',85,21,'Domiciliación');
+    g(6,'Factura de luz','Suministros (luz, agua, gas)',165+rnd()*35,21,'Domiciliación');
+    g(9,'Factura de agua','Suministros (luz, agua, gas)',36+rnd()*8,10,'Domiciliación');
+    g(12,'Gas butano','Suministros (luz, agua, gas)',42+rnd()*10,21,'Efectivo');
+    g(15,'Teléfono e internet','Teléfono e internet',39.9,21,'Domiciliación');
+    if(k===1)g(19,'Revisión de la cafetera','Mantenimiento',120,21,'Tarjeta');
+    g(28,'Nóminas (2 empleados)','Salarios',2600,0,'Transferencia');
+    g(Math.min(30,new Date(Y,M,0).getDate()),'Seguros sociales','Seguridad Social',820,0,'Domiciliación');
+  }
+  carta.forEach(c=>delete c.w);
+  const o={v:2,ejemplo:true,settings:defSettings(),carta,insumos,ventas,entradas,movimientos,gastos,proveedores};
+  // consumo de las ventas de hoy (solo movimiento informativo; el stock de ejemplo ya está ajustado)
+  const S0=S;S=o;o.ventas.filter(v=>v.fecha===t).forEach(v=>{v.consumo=consumo(v.items);movVentas(v,1)});S=S0;
+  return o;
+}
+function defSettings(){return {nombre:'',direccion:'',nif:'',ciudad:'',pais:'España',ivas:[21,10,4,0],ivaCarta:10}}
+function blank(){return {v:2,ejemplo:false,settings:defSettings(),carta:[],insumos:[],ventas:[],entradas:[],movimientos:[],gastos:[],proveedores:[]}}
+function load(){try{const r=localStorage.getItem(KEY);if(r){const o=JSON.parse(r);if(o&&o.carta&&!(o.ejemplo&&o.v!==2)){
+  o.settings=Object.assign(defSettings(),o.settings||{});o.carta.forEach(c=>c.receta=c.receta||[]);o.v=2;S=o;return}}}catch(e){}S=seed();save()}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+
+/* ===================== Recetas y consumo ===================== */
+const rUnit=u=>u==='kg'?'g':u==='L'?'ml':u;
+const rFac=u=>(u==='kg'||u==='L')?1000:1;
+const r4=n=>Math.round(n*10000)/10000;
+function consumo(items){const m={};items.forEach(it=>{const c=S.carta.find(x=>x.id===it.cid);if(!c||!c.receta)return;c.receta.forEach(r=>{m[r.insumoId]=(m[r.insumoId]||0)+r.cant*it.cant})});
+  return Object.entries(m).map(([insumoId,cant])=>({insumoId,cant:r4(cant)}))}
+function movVentas(v,sign){(v.consumo||[]).forEach(u=>{const i=S.insumos.find(x=>x.id===u.insumoId);if(!i)return;
+  let m=S.movimientos.find(x=>x.fecha===v.fecha&&x.insumoId===u.insumoId&&x.motivo==='Ventas del día');
+  if(sign>0){if(m){m.cant=r4(m.cant+u.cant);if(v.hora>m.hora)m.hora=v.hora}else S.movimientos.push({id:uid(),fecha:v.fecha,hora:v.hora,insumoId:i.id,nombre:i.nombre,tipo:'salida',cant:u.cant,motivo:'Ventas del día'})}
+  else if(m){m.cant=r4(m.cant-u.cant);if(m.cant<=0)S.movimientos=S.movimientos.filter(x=>x!==m)}})}
+const costeRacion=c=>sum(c.receta||[],r=>{const i=S.insumos.find(x=>x.id===r.insumoId);return i?r.cant*i.coste:0});
+
+/* ===================== Cálculos ===================== */
+const vTot=v=>sum(v.items,i=>i.cant*i.precio);
+const vIva=v=>sum(v.items,i=>i.cant*i.precio*i.iva/(100+i.iva));
+const eBase=e=>sum(e.lineas,l=>l.cant*l.coste);
+const eIva=e=>sum(e.lineas,l=>l.cant*l.coste*l.iva/100);
+const gIva=g=>g.base*g.iva/100;
+const provName=id=>(S.proveedores.find(p=>p.id===id)||{}).nombre||'Sin proveedor';
+function per(key){const t=today(),d=new Date(t+'T12:00:00'),Y=d.getFullYear(),M=d.getMonth();
+  if(key==='hoy')return[t,t];
+  if(key==='semana'){const w=(d.getDay()+6)%7;return[addDays(t,-w),t]}
+  if(key==='mes')return[Y+'-'+pad(M+1)+'-01',t];
+  if(key==='anterior'){const a=new Date(Y,M-1,1),b=new Date(Y,M,0);return[iso(a),iso(b)]}
+  if(key==='trimestre'){const q=Math.floor(M/3)*3;return[Y+'-'+pad(q+1)+'-01',t]}
+  return[Y+'-01-01',t]}
+function totals(a,b){
+  const vs=S.ventas.filter(v=>inR(v.fecha,a,b)), es=S.entradas.filter(e=>inR(e.fecha,a,b)), gs=S.gastos.filter(g=>inR(g.fecha,a,b));
+  const ventas=sum(vs,vTot), ivaR=sum(vs,vIva), compras=sum(es,eBase), ivaC=sum(es,eIva), gastos=sum(gs,g=>g.base), ivaG=sum(gs,gIva);
+  const ingresos=ventas-ivaR, benef=ingresos-compras-gastos;
+  return {vs,es,gs,tickets:vs.length,ventas,ivaR,ingresos,compras,ivaC,gastos,ivaG,ivaS:ivaC+ivaG,benef,margen:ingresos?benef/ingresos*100:0};
+}
+const stState=i=>i.stock<=0?['Agotado','p-bad']:i.stock<i.min?['Stock bajo','p-warn']:['Disponible','p-ok'];
+
+/* ===================== Gráficos ===================== */
+function niceStep(x){const p=Math.pow(10,Math.floor(Math.log10(x||1))),m=x/p;return (m<=1?1:m<=2?2:m<=5?5:10)*p}
+function axis(max,W,H,L,R,T,B){const step=niceStep(max/4),top=Math.max(step,Math.ceil(max/step)*step);let s='';
+  for(let v=0;v<=top+1e-9;v+=step){const y=T+(H-T-B)*(1-v/top);s+=`<line x1="${L}" x2="${W-R}" y1="${y}" y2="${y}" stroke="var(--line)" stroke-width="1"/><text x="${L-8}" y="${y+4}" text-anchor="end">${v>=1000?grp(String(Math.round(v))):Math.round(v)}</text>`}
+  return{top,s}}
+function barChart(rows,{h=230,label='€'}={}){
+  const W=620,H=h,L=52,R=8,T=18,B=30,max=Math.max(1,...rows.map(r=>r.v)),{top,s}=axis(max,W,H,L,R,T,B),cw=(W-L-R)/rows.length,bw=Math.min(48,cw*.62);
+  let o=`<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Gráfico de barras">${s}`;
+  rows.forEach((r,i)=>{const x=L+cw*i+(cw-bw)/2,bh=(H-T-B)*r.v/top,y=H-B-bh;
+    o+=`<rect x="${x}" y="${y}" width="${bw}" height="${Math.max(0,bh)}" rx="7" fill="${r.hl?'var(--orange)':'var(--orange-mute)'}"><title>${esc(r.t||r.l)}: ${eur(r.v)}</title></rect>`;
+    if(r.hl)o+=`<text x="${x+bw/2}" y="${y-6}" text-anchor="middle" style="fill:var(--ink);font-weight:700">${eur0(r.v)}</text>`;
+    o+=`<text x="${x+bw/2}" y="${H-10}" text-anchor="middle">${esc(r.l)}</text>`});
+  return o+'</svg>'}
+function groupChart(rows){
+  const W=620,H=250,L=56,R=8,T=14,B=30,max=Math.max(1,...rows.flatMap(r=>[r.a,r.b])),{top,s}=axis(max,W,H,L,R,T,B),cw=(W-L-R)/rows.length,bw=Math.min(26,cw*.3);
+  let o=`<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Ingresos frente a gastos por mes">${s}`;
+  rows.forEach((r,i)=>{const cx=L+cw*i+cw/2;[[r.a,'var(--orange)',-bw-2],[r.b,'var(--cobalt)',2]].forEach(([v,c,dx])=>{const bh=(H-T-B)*v/top;
+    o+=`<rect x="${cx+dx}" y="${H-B-bh}" width="${bw}" height="${Math.max(0,bh)}" rx="5" fill="${c}"><title>${eur(v)}</title></rect>`});
+    o+=`<text x="${cx}" y="${H-10}" text-anchor="middle">${esc(r.l)}</text>`});
+  return o+'</svg>'}
+
+/* ===================== Estado de la interfaz ===================== */
+const UI={vtab:'caja',vdesde:today(),vhasta:today(),mcat:'Todas',icat:'Todas',gmes:ym(today()),iper:'mes'};
+let cart=[];
+
+/* ===================== Vistas ===================== */
+const banner=()=>S.ejemplo?`<div class="banner"><span><b>Datos de ejemplo.</b> Explora la aplicación con una cafetería ficticia. Cuando quieras, empieza con tus propios datos.</span><span class="actions"><a class="btn sm" href="#guia">Ver la guía</a><button class="btn sm blue" data-act="startfresh">Empezar desde cero</button></span></div>`:'';
+const head=(eb,t,p,acts='')=>`<div class="head"><div><div class="eyebrow">${eb}</div><h1>${t}</h1>${p?`<p>${p}</p>`:''}</div><div class="actions">${acts}</div></div>`;
+const kpi=(cls,ic,l,v,t='')=>`<div class="kpi ${cls}"><div class="ic">${ic}</div><div style="min-width:0"><div class="l">${l}</div><div class="v">${v}</div>${t?`<div class="t">${t}</div>`:''}</div></div>`;
+const av=(name,cat)=>`<span class="av ${catIdx(cat)}">${esc(name.trim().charAt(0).toUpperCase())}</span>`;
+const trend=(a,b,txt)=>{if(!b)return txt?`<span>${txt}</span>`:'';const d=(a-b)/b*100;return `<span class="${d>=0?'up':'down'}">${d>=0?'↗ +':'↘ '}${pct(d)}</span> ${txt}`};
+
+const V={};
+V.panel=()=>{
+  const t=today(),d=new Date(),h=d.getHours(),now=nowTime(),y=addDays(t,-1);
+  const hoy=S.ventas.filter(v=>v.fecha===t), ayer=S.ventas.filter(v=>v.fecha===y&&v.hora<=now);
+  const vh=sum(hoy,vTot), va=sum(ayer,vTot), [ma,mb]=per('mes'), M=totals(ma,mb), Mp=totals(...per('anterior'));
+  const gastosMes=sum(M.es,e=>eBase(e)+eIva(e))+sum(M.gs,g=>g.base+gIva(g));
+  const low=S.insumos.filter(i=>i.stock<i.min);
+  const days=[];for(let k=6;k>=0;k--){const f=addDays(t,-k);days.push({f,l:DIAS_C[wday(f)],t:cap(DIAS[wday(f)])+' '+fdate(f),v:sum(S.ventas.filter(v=>v.fecha===f),vTot)})}
+  const best=days.slice(0,-1).reduce((a,b)=>b.v>a.v?b:a,days[0]);days.forEach(x=>x.hl=x===best);
+  const top={};M.vs.forEach(v=>v.items.forEach(i=>{top[i.nombre]=(top[i.nombre]||0)+i.cant}));const tops=Object.entries(top).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const mov=[...S.movimientos].sort((a,b)=>(b.fecha+b.hora).localeCompare(a.fecha+a.hora)).slice(0,6);
+  const greet=h<14?'Buenos días':h<21?'Buenas tardes':'Buenas noches';
+  return `${banner()}
+  <section class="hero"><div class="txt"><div class="eyebrow">Panel principal</div><h1>${greet}</h1><div class="date">${cap(DIAS[d.getDay()])}, ${d.getDate()} de ${MESES[d.getMonth()]} de ${d.getFullYear()} · <span class="script">buen café, mejores días</span></div>
+   <div class="actions" style="margin-top:6px"><a class="btn pri" href="#ventas">${IC.cart} Nueva venta</a><button class="btn" data-act="newentrada">${IC.recepcion} Registrar entrada</button></div></div>
+   <div class="art" aria-hidden="true">${heroArt()}</div></section>
+  <div class="kpis">
+   ${kpi('k-or',IC.ventas,'Ventas de hoy',eur(vh),trend(vh,va,'respecto a ayer a esta hora'))}
+   ${kpi('k-gr',IC.euro,'Beneficio del mes',eur(M.benef),'sin IVA · margen '+pct(M.margen))}
+   ${kpi('k-bl',IC.coins,'Gastos del mes',eur(gastosMes),'compras y gastos, IVA incluido')}
+   ${kpi('k-am',IC.alert,'Stock bajo',low.length+' '+(low.length===1?'producto':'productos'),low.length?'<a href="#inventario" style="color:inherit">Revisar inventario →</a>':'Todo en orden')}
+  </div>
+  <div class="grid-2">
+   <div class="card"><div class="ch"><h2>Ventas de la semana</h2><span class="sub">IVA incluido</span></div>${barChart(days)}
+     <div class="note">${IC.cup}<span><b>${cap(DIAS[wday(best.f)])}</b> fue el día con más ventas de los últimos seis días: ${eur(best.v)}.</span></div></div>
+   <div class="card"><div class="ch"><h2>Stock bajo</h2><a class="btn sm" href="#inventario">Ver todo</a></div>
+     <div class="list">${low.length?low.map(i=>`<div class="li">${av(i.nombre,i.cat)}<div class="grow"><b>${esc(i.nombre)}</b><span>Mínimo ${qn(i.min)} ${esc(i.unidad)}</span></div><div class="r"><span class="pill ${stState(i)[1]}">${qn(i.stock)} ${esc(i.unidad)}</span></div></div>`).join(''):'<div class="empty">No hay productos por debajo del mínimo.</div>'}</div></div>
+  </div>
+  <div class="grid-2e">
+   <div class="card"><div class="ch"><h2>Movimientos recientes</h2><a class="btn sm" href="#inventario">Inventario</a></div><div class="list">${mov.length?mov.map(movRow).join(''):'<div class="empty">Aún no hay movimientos de inventario.</div>'}</div></div>
+   <div class="card"><div class="ch"><h2>Más vendidos este mes</h2><span class="sub">${M.tickets} tickets · ticket medio ${eur(M.tickets?M.ventas/M.tickets:0)}</span></div>
+     ${tops.length?tops.map(([n,q])=>`<div class="hb"><span>${esc(n)}</span><span class="bar"><i style="width:${q/tops[0][1]*100}%;background:var(--orange)"></i></span><b class="num">${q}</b></div>`).join(''):'<div class="empty">Todavía no hay ventas este mes.</div>'}
+     <div class="sub" style="margin-top:10px">Mes anterior: ${eur(Mp.ventas)} en ventas.</div></div>
+  </div>`;
+};
+const movRow=m=>`<div class="li">${av(m.nombre,'m'+m.nombre)}<div class="grow"><b>${esc(m.nombre)}</b><span>${esc(m.motivo||'')}</span></div><span class="tag ${m.tipo==='entrada'?'in':'out'}">${m.tipo==='entrada'?'Entrada':'Salida'}</span><div class="r"><b>${m.tipo==='entrada'?'+':'−'} ${qn(m.cant)} ${esc((S.insumos.find(i=>i.id===m.insumoId)||{}).unidad||'')}</b><small>${m.fecha===today()?'Hoy':m.fecha===addDays(today(),-1)?'Ayer':fdate(m.fecha)} ${esc(m.hora||'')}</small></div></div>`;
+function heroArt(){return `<svg viewBox="0 0 340 220" preserveAspectRatio="xMaxYMax meet">
+ <defs><pattern id="az" width="40" height="40" patternUnits="userSpaceOnUse"><rect width="40" height="40" fill="#1d3fae"/><g fill="#f4efe4"><path d="M20 4c4 5 4 11 0 16c-4-5-4-11 0-16z"/><path d="M20 36c4-5 4-11 0-16c-4 5-4 11 0 16z"/><path d="M4 20c5-4 11-4 16 0c-5 4-11 4-16 0z"/><path d="M36 20c-5-4-11-4-16 0c5 4 11 4 16 0z"/></g><circle cx="20" cy="20" r="3" fill="#e8740f"/></pattern></defs>
+ <path d="M150 0h190v220H90C130 170 120 60 150 0z" fill="url(#az)" opacity=".9"/>
+ <ellipse cx="190" cy="196" rx="120" ry="14" fill="#1b234022"/>
+ <g transform="translate(118 112)"><path d="M0 18h96v34a34 34 0 0 1-34 34H34A34 34 0 0 1 0 52z" fill="#fffdf9" stroke="#1d3fae" stroke-width="3"/><path d="M96 30h10a14 14 0 0 1 0 28h-8" fill="none" stroke="#1d3fae" stroke-width="5"/><ellipse cx="48" cy="18" rx="48" ry="9" fill="#9a5a2a"/><ellipse cx="48" cy="18" rx="30" ry="5" fill="#d9a46e"/><path d="M14 46c10-6 18 6 28 0s18 6 28 0" stroke="#1d3fae" stroke-width="2.5" fill="none"/><path d="M30 0c-4 6 4 8 0 14M50 -6c-4 6 4 8 0 14M68 0c-4 6 4 8 0 14" stroke="#c9b9a0" stroke-width="2.5" fill="none" stroke-linecap="round"/></g>
+ <g transform="translate(250 120)"><circle r="44" fill="#f08a1c"/><circle r="38" fill="#fbb04a"/><g stroke="#f39223" stroke-width="2.5">${[0,30,60,90,120,150].map(a=>`<line x1="0" y1="0" x2="${(38*Math.cos(a*Math.PI/180)).toFixed(1)}" y2="${(38*Math.sin(a*Math.PI/180)).toFixed(1)}"/><line x1="0" y1="0" x2="${(-38*Math.cos(a*Math.PI/180)).toFixed(1)}" y2="${(-38*Math.sin(a*Math.PI/180)).toFixed(1)}"/>`).join('')}</g><circle r="5" fill="#fff4dc"/></g>
+ <path d="M262 74c10-22 34-30 50-26c-8 20-30 30-50 26z" fill="#3c9a4e"/><path d="M262 74c-14-14-34-14-46-6c12 14 32 16 46 6z" fill="#2f7d3f"/>
+</svg>`}
+
+V.ventas=()=>{
+  const tabs=[['caja','Caja'],['historial','Historial de ventas'],['carta','Carta y precios']];
+  return `${banner()}${head('Ventas','Ventas','Cobra en caja, consulta el historial y gestiona los precios de la carta.')}
+  <div class="tabs" role="tablist">${tabs.map(([k,l])=>`<button class="tab ${UI.vtab===k?'on':''}" data-act="vtab" data-id="${k}" role="tab" aria-selected="${UI.vtab===k}">${l}</button>`).join('')}</div>
+  ${UI.vtab==='caja'?caja():UI.vtab==='historial'?historial():cartaV()}`;
+};
+function caja(){
+  const cats=['Todas',...new Set(S.carta.map(c=>c.cat))], items=S.carta.filter(c=>UI.mcat==='Todas'||c.cat===UI.mcat), tot=sum(cart,l=>l.cant*l.precio), iva=sum(cart,l=>l.cant*l.precio*l.iva/(100+l.iva));
+  const hoy=S.ventas.filter(v=>v.fecha===today());
+  return `<div class="pos"><div class="card"><div class="ch"><h2>Carta</h2><span class="sub">Toca un producto para añadirlo al ticket</span></div>
+    <div class="chips">${cats.map(c=>`<button class="chip ${UI.mcat===c?'on':''}" data-act="mcat" data-id="${esc(c)}">${esc(c)}</button>`).join('')}</div>
+    <div class="menu">${items.length?items.map(c=>`<button class="mi" data-act="addcart" data-id="${c.id}">${av(c.nombre,c.cat)}<b>${esc(c.nombre)}</b><span class="pr">${eur(c.precio)}</span></button>`).join(''):'<div class="empty">La carta está vacía. Añade productos en «Carta y precios».</div>'}</div></div>
+   <div class="card ticket"><div class="ch"><h2>Ticket</h2>${cart.length?'<button class="btn sm" data-act="clearcart">Vaciar</button>':''}</div>
+    ${cart.length?cart.map(l=>`<div class="tl"><div class="grow"><b>${esc(l.nombre)}</b><span>${eur(l.precio)} / ud.</span></div><div class="qty"><button data-act="cminus" data-id="${l.cid}" aria-label="Quitar uno">−</button><span>${l.cant}</span><button data-act="cplus" data-id="${l.cid}" aria-label="Añadir uno">+</button></div><b class="num" style="min-width:64px;text-align:right">${eur(l.cant*l.precio)}</b></div>`).join(''):'<div class="empty">El ticket está vacío.</div>'}
+    <div class="ttot"><span class="sub">Total (IVA incl.)<br>IVA: ${eur(iva)}</span><span class="v num">${eur(tot)}</span></div>
+    <div class="pay">${PAGOS.map(p=>`<button data-act="cobrar" data-id="${p}" ${cart.length?'':'disabled'}>${p}</button>`).join('')}</div>
+    <div class="sub" style="margin-top:12px">Hoy: ${hoy.length} tickets · ${eur(sum(hoy,vTot))}</div></div></div>`;
+}
+function historial(){
+  const vs=S.ventas.filter(v=>inR(v.fecha,UI.vdesde,UI.vhasta)).sort((a,b)=>(b.fecha+b.hora).localeCompare(a.fecha+a.hora));
+  const by=p=>sum(vs.filter(v=>v.pago===p),vTot), shown=vs.slice(0,300);
+  return `<div class="card"><div class="ch"><div class="actions" style="align-items:flex-end">
+     <label class="f">Desde<input type="date" id="vdesde" value="${UI.vdesde}"></label><label class="f">Hasta<input type="date" id="vhasta" value="${UI.vhasta}"></label>
+     <button class="btn sm" data-act="vrange" data-id="hoy">Hoy</button><button class="btn sm" data-act="vrange" data-id="semana">Esta semana</button><button class="btn sm" data-act="vrange" data-id="mes">Este mes</button></div></div>
+   <div class="kpis k5" style="margin-bottom:16px">${kpi('k-or',IC.ventas,'Total',eur(sum(vs,vTot)),vs.length+' tickets')}${kpi('',IC.coins,'Efectivo',eur(by('Efectivo')))}${kpi('',IC.gastos,'Tarjeta',eur(by('Tarjeta')))}${kpi('',IC.euro,'Bizum',eur(by('Bizum')))}${kpi('k-bl',IC.informes,'IVA repercutido',eur(sum(vs,vIva)))}</div>
+   <div class="tbl"><table><thead><tr><th>Fecha</th><th>Hora</th><th>Productos</th><th>Pago</th><th class="n">Total</th><th></th></tr></thead><tbody>
+   ${shown.length?shown.map(v=>`<tr><td>${fdate(v.fecha)}</td><td class="num">${v.hora}</td><td style="min-width:220px">${v.items.map(i=>i.cant+'× '+esc(i.nombre)).join(', ')}</td><td><span class="tag">${v.pago}</span></td><td class="n"><b>${eur(vTot(v))}</b></td><td class="act"><button class="ib" data-act="delventa" data-id="${v.id}" aria-label="Borrar venta">${IC.trash}</button></td></tr>`).join(''):'<tr><td colspan="6"><div class="empty">No hay ventas en este periodo.</div></td></tr>'}
+   </tbody></table></div>${vs.length>300?`<div class="sub" style="margin-top:10px">Se muestran las 300 ventas más recientes de ${vs.length}.</div>`:''}</div>`;
+}
+function cartaV(){
+  return `<div class="card"><div class="ch"><div><h2>Carta, precios y recetas</h2><div class="sub">Precios de venta con IVA incluido. La receta indica qué ingredientes se descuentan del inventario en cada venta.</div></div><button class="btn pri" data-act="newcarta">${IC.plus} Nuevo producto</button></div>
+  <div class="tbl"><table><thead><tr><th>Producto</th><th>Receta (por unidad)</th><th class="n">Precio</th><th class="n">IVA</th><th class="n">Coste</th><th class="n">Margen</th><th>Coste %</th><th></th></tr></thead><tbody>
+  ${S.carta.length?S.carta.map(c=>{const neto=c.precio/(1+c.iva/100),co=costeRacion(c),fc=neto?co/neto*100:0,rec=(c.receta||[]).map(r=>{const i=S.insumos.find(x=>x.id===r.insumoId);return i?`${qn(r.cant*rFac(i.unidad))} ${rUnit(i.unidad)} ${esc(i.nombre.toLowerCase())}`:''}).filter(Boolean);
+   return `<tr><td><span class="prod">${av(c.nombre,c.cat)}<span>${esc(c.nombre)}<br><small class="sub">${esc(c.cat)}</small></span></span></td>
+   <td style="min-width:200px;font-size:13.5px">${rec.length?rec.join(' · '):'<span class="tag">Sin receta</span>'}</td>
+   <td class="n"><b>${eur(c.precio)}</b></td><td class="n">${c.iva} %</td><td class="n">${rec.length?eur(co):'—'}</td><td class="n">${rec.length?eur(neto-co):'—'}</td>
+   <td>${rec.length?`<span class="pill ${fc<=35?'p-ok':fc<=45?'p-warn':'p-bad'}">${pct(fc)}</span>`:''}</td>
+   <td class="act"><button class="ib" data-act="editcarta" data-id="${c.id}" aria-label="Editar">${IC.edit}</button><button class="ib" data-act="delcarta" data-id="${c.id}" aria-label="Borrar">${IC.trash}</button></td></tr>`}).join(''):'<tr><td colspan="8"><div class="empty">Añade tu primer producto de la carta.</div></td></tr>'}
+  </tbody></table></div><div class="sub" style="margin-top:12px">Coste = lo que cuestan los ingredientes de una unidad, sin IVA. Margen = precio sin IVA − coste. En cafeterías se recomienda un coste por debajo del 35 % del precio.</div></div>`;
+}
+
+V.recepcion=()=>{
+  const [a,b]=per('mes'), mes=S.entradas.filter(e=>inR(e.fecha,a,b)), pend=S.entradas.filter(e=>e.estado!=='Pagado');
+  const list=[...S.entradas].sort((x,y)=>y.fecha.localeCompare(x.fecha)).slice(0,120);
+  return `${banner()}${head('Compras','Recepción de mercancías','Registra cada albarán: el stock del inventario se actualiza solo.',`<button class="btn pri" data-act="newentrada">${IC.plus} Registrar entrada</button>`)}
+  <div class="kpis k3">${kpi('k-or',IC.recepcion,'Compras este mes',eur(sum(mes,e=>eBase(e)+eIva(e))),mes.length+' albaranes · IVA incluido')}${kpi('k-am',IC.alert,'Pendiente de pago',eur(sum(pend,e=>eBase(e)+eIva(e))),pend.length+' albaranes sin pagar')}${kpi('k-bl',IC.informes,'IVA soportado del mes',eur(sum(mes,eIva)),'deducible en el Modelo 303')}</div>
+  <div class="card"><div class="ch"><h2>Últimas entradas</h2><span class="sub">Toca el estado para cambiarlo</span></div>
+  <div class="tbl"><table><thead><tr><th>Fecha</th><th>Proveedor</th><th>Albarán</th><th>Productos</th><th class="n">Base</th><th class="n">IVA</th><th class="n">Total</th><th>Estado</th><th></th></tr></thead><tbody>
+  ${list.length?list.map(e=>`<tr><td>${fdate(e.fecha)}</td><td><b>${esc(provName(e.proveedorId))}</b></td><td class="num">${esc(e.albaran)}</td><td style="min-width:180px">${e.lineas.map(l=>esc(l.nombre)+' ('+qn(l.cant)+')').join(', ')}</td>
+   <td class="n">${eur(eBase(e))}</td><td class="n">${eur(eIva(e))}</td><td class="n"><b>${eur(eBase(e)+eIva(e))}</b></td>
+   <td><button class="pill ${e.estado==='Pagado'?'p-ok':e.estado==='Recibido'?'p-info':'p-warn'}" data-act="estado" data-id="${e.id}">${e.estado}</button></td>
+   <td class="act"><button class="ib" data-act="delentrada" data-id="${e.id}" aria-label="Borrar">${IC.trash}</button></td></tr>`).join(''):'<tr><td colspan="9"><div class="empty">Aún no has registrado ninguna entrada.</div></td></tr>'}
+  </tbody></table></div></div>`;
+};
+
+V.inventario=()=>{
+  const cats=['Todas',...new Set(S.insumos.map(i=>i.cat))], low=S.insumos.filter(i=>i.stock<i.min), valor=sum(S.insumos,i=>i.stock*i.coste);
+  const items=S.insumos.filter(i=>UI.icat==='Todas'||i.cat===UI.icat);
+  const mov=[...S.movimientos].sort((a,b)=>(b.fecha+b.hora).localeCompare(a.fecha+a.hora)).slice(0,8);
+  return `${banner()}${head('Almacén','Inventario','Existencias de materia prima y productos de compra.',`<button class="btn" data-act="newsalida">${IC.out} Registrar salida</button><button class="btn pri" data-act="newinsumo">${IC.plus} Nuevo producto</button>`)}
+  <div class="kpis k3">${kpi('k-gr',IC.recepcion,'Productos en stock',S.insumos.filter(i=>i.stock>0).length,'de '+S.insumos.length+' productos')}${kpi('k-am',IC.alert,'Bajo inventario',low.length,low.length?low.slice(0,3).map(i=>esc(i.nombre)).join(', '):'Todo en orden')}${kpi('k-bl',IC.coins,'Valor del inventario',eur(valor),'a precio de coste, sin IVA')}</div>
+  <div class="grid-2"><div class="card"><div class="ch" style="gap:10px"><div class="search">${IC.search}<input id="iq" placeholder="Buscar producto…" autocomplete="off"></div></div>
+   <div class="chips" style="margin-bottom:12px">${cats.map(c=>`<button class="chip ${UI.icat===c?'on':''}" data-act="icat" data-id="${esc(c)}">${esc(c)}</button>`).join('')}</div>
+   <div class="tbl"><table><thead><tr><th>Producto</th><th>Categoría</th><th class="n">Stock</th><th class="n">Mínimo</th><th class="n">Coste</th><th>Estado</th><th></th></tr></thead><tbody id="itbody">
+   ${items.length?items.map(i=>{const[s,c]=stState(i);return `<tr data-name="${esc(i.nombre.toLowerCase())}"><td><span class="prod">${av(i.nombre,i.cat)}${esc(i.nombre)}</span></td><td>${esc(i.cat)}</td><td class="n"><b>${qn(i.stock)}</b> ${esc(i.unidad)}</td><td class="n">${qn(i.min)}</td><td class="n">${eur(i.coste)}</td><td><span class="pill ${c}">${s}</span></td>
+    <td class="act"><button class="btn sm" data-act="newsalida" data-id="${i.id}">Salida</button><button class="ib" data-act="editinsumo" data-id="${i.id}" aria-label="Editar">${IC.edit}</button><button class="ib" data-act="delinsumo" data-id="${i.id}" aria-label="Borrar">${IC.trash}</button></td></tr>`}).join(''):'<tr><td colspan="7"><div class="empty">No hay productos en esta categoría.</div></td></tr>'}
+   </tbody></table></div></div>
+  <div class="card"><div class="ch"><h2>Movimientos recientes</h2></div><div class="list">${mov.length?mov.map(movRow).join(''):'<div class="empty">Sin movimientos todavía.</div>'}</div></div></div>`;
+};
+
+V.gastos=()=>{
+  const months=[...new Set([ym(today()),...S.gastos.map(g=>ym(g.fecha))])].sort().reverse();
+  const gs=S.gastos.filter(g=>ym(g.fecha)===UI.gmes).sort((a,b)=>b.fecha.localeCompare(a.fecha));
+  const byCat={};gs.forEach(g=>byCat[g.cat]=(byCat[g.cat]||0)+g.base+gIva(g));const cats=Object.entries(byCat).sort((a,b)=>b[1]-a[1]);
+  const [Y,M]=UI.gmes.split('-').map(Number);
+  return `${banner()}${head('Gastos','Gastos','Alquiler, suministros, nóminas y demás gastos del negocio. Las compras a proveedores van en Recepción de mercancías.',`<button class="btn pri" data-act="newgasto">${IC.plus} Añadir gasto</button>`)}
+  <div class="chips">${months.slice(0,12).map(m=>{const[y,mm]=m.split('-').map(Number);return `<button class="chip ${UI.gmes===m?'on':''}" data-act="gmes" data-id="${m}">${cap(MESES[mm-1])} ${y}</button>`}).join('')}</div>
+  <div class="kpis k3">${kpi('k-or',IC.gastos,'Gastos de '+MESES[M-1],eur(sum(gs,g=>g.base+gIva(g))),gs.length+' gastos · IVA incluido')}${kpi('k-bl',IC.informes,'IVA soportado',eur(sum(gs,gIva)),'deducible en el Modelo 303')}${kpi('k-am',IC.coins,'Mayor partida',cats.length?eur(cats[0][1]):'—',cats.length?esc(cats[0][0]):'Sin gastos')}</div>
+  <div class="grid-2"><div class="card"><div class="tbl"><table><thead><tr><th>Fecha</th><th>Concepto</th><th>Categoría</th><th class="n">Base</th><th class="n">IVA</th><th class="n">Total</th><th>Pago</th><th></th></tr></thead><tbody>
+   ${gs.length?gs.map(g=>`<tr><td>${fdate(g.fecha)}</td><td><b>${esc(g.concepto)}</b></td><td>${esc(g.cat)}</td><td class="n">${eur(g.base)}</td><td class="n">${g.iva} %</td><td class="n"><b>${eur(g.base+gIva(g))}</b></td><td><span class="tag">${esc(g.pago)}</span></td>
+    <td class="act"><button class="ib" data-act="editgasto" data-id="${g.id}" aria-label="Editar">${IC.edit}</button><button class="ib" data-act="delgasto" data-id="${g.id}" aria-label="Borrar">${IC.trash}</button></td></tr>`).join(''):'<tr><td colspan="8"><div class="empty">No hay gastos en este mes.</div></td></tr>'}
+   </tbody></table></div></div>
+  <div class="card"><div class="ch"><h2>Por categoría</h2></div>${cats.length?cats.map(([c,v])=>`<div class="hb"><span>${esc(c)}</span><span class="bar"><i style="width:${v/cats[0][1]*100}%"></i></span><b class="num">${eur0(v)}</b></div>`).join(''):'<div class="empty">Sin datos.</div>'}</div></div>`;
+};
+
+V.proveedores=()=>{
+  const [a,b]=per('mes');
+  return `${banner()}${head('Compras','Proveedores','Datos de contacto e historial de compras de cada proveedor.',`<button class="btn pri" data-act="newprov">${IC.plus} Nuevo proveedor</button>`)}
+  <div class="provs">${S.proveedores.length?S.proveedores.map(p=>{const es=S.entradas.filter(e=>e.proveedorId===p.id),mes=es.filter(e=>inR(e.fecha,a,b)),pend=es.filter(e=>e.estado!=='Pagado');
+   return `<div class="card prov"><div class="prod">${av(p.nombre,p.nombre)}<h2 style="font-size:20px">${esc(p.nombre)}</h2></div>
+    <dl><dt>NIF/CIF</dt><dd>${esc(p.nif)||'—'}</dd><dt>Teléfono</dt><dd>${esc(p.tel)||'—'}</dd><dt>Correo</dt><dd>${esc(p.email)||'—'}</dd><dt>Dirección</dt><dd>${esc(p.dir)||'—'}</dd><dt>Suministra</dt><dd>${esc(p.productos)||'—'}</dd></dl>
+    <div class="foot"><div><div class="sub">Comprado este mes</div><b class="num" style="font-size:18px">${eur(sum(mes,e=>eBase(e)+eIva(e)))}</b>${pend.length?`<div><span class="pill p-warn" style="margin-top:6px">Pendiente ${eur(sum(pend,e=>eBase(e)+eIva(e)))}</span></div>`:''}</div>
+    <div><button class="ib" data-act="histprov" data-id="${p.id}" aria-label="Ver historial">${IC.informes}</button><button class="ib" data-act="editprov" data-id="${p.id}" aria-label="Editar">${IC.edit}</button><button class="ib" data-act="delprov" data-id="${p.id}" aria-label="Borrar">${IC.trash}</button></div></div></div>`}).join(''):'<div class="card empty">Añade tu primer proveedor.</div>'}</div>`;
+};
+
+V.informes=()=>{
+  const P=[['mes','Este mes'],['anterior','Mes anterior'],['trimestre','Este trimestre'],['anio','Este año']], [a,b]=per(UI.iper), T=totals(a,b);
+  const d=new Date(), rows=[];for(let k=5;k>=0;k--){const m=new Date(d.getFullYear(),d.getMonth()-k,1),A=iso(m),B=iso(new Date(m.getFullYear(),m.getMonth()+1,0)),x=totals(A,B);rows.push({l:MES_C[m.getMonth()],a:x.ingresos,b:x.compras+x.gastos})}
+  const cat={'Compras a proveedores':T.compras};T.gs.forEach(g=>cat[g.cat]=(cat[g.cat]||0)+g.base);const cats=Object.entries(cat).filter(c=>c[1]>0).sort((x,y)=>y[1]-x[1]);
+  const Y=d.getFullYear(),qn_=Math.floor(d.getMonth()/3),qs=[];for(let q=0;q<=qn_;q++){const A=Y+'-'+pad(q*3+1)+'-01',B=iso(new Date(Y,q*3+3,0)),x=totals(A,B);qs.push({q:q+1,r:x.ivaR,s:x.ivaS,res:x.ivaR-x.ivaS})}
+  const pay={};T.vs.forEach(v=>pay[v.pago]=(pay[v.pago]||0)+vTot(v));
+  return `${banner()}${head('Contabilidad','Informes',`Del ${fdate(a)} al ${fdate(b)} · importes sin IVA salvo que se indique.`)}
+  <div class="chips">${P.map(([k,l])=>`<button class="chip ${UI.iper===k?'on':''}" data-act="iper" data-id="${k}">${l}</button>`).join('')}</div>
+  <div class="kpis k5">${kpi('k-or',IC.ventas,'Ingresos',eur(T.ingresos),T.tickets+' tickets')}${kpi('',IC.recepcion,'Compras',eur(T.compras))}${kpi('',IC.gastos,'Gastos',eur(T.gastos))}${kpi(T.benef>=0?'k-gr':'k-am',T.benef>=0?IC.trend:IC.trendd,'Beneficio neto',eur(T.benef))}${kpi('k-bl',IC.euro,'Margen de beneficio',pct(T.margen))}</div>
+  <div class="grid-2"><div class="card"><div class="ch"><h2>Ingresos y gastos por mes</h2><div class="legend"><span><i style="background:var(--orange)"></i>Ingresos</span><span><i style="background:var(--cobalt)"></i>Compras + gastos</span></div></div>${groupChart(rows)}</div>
+   <div class="card"><div class="ch"><h2>Dónde se va el dinero</h2></div>${cats.length?cats.map(([c,v])=>`<div class="hb"><span>${esc(c)}</span><span class="bar"><i style="width:${v/cats[0][1]*100}%"></i></span><b class="num">${eur0(v)}</b></div>`).join(''):'<div class="empty">Sin gastos en el periodo.</div>'}</div></div>
+  <div class="grid-2"><div class="card"><div class="ch"><div><h2>IVA trimestral ${Y}</h2><div class="sub">Estimación orientativa para el Modelo 303. Confírmala con tu gestoría.</div></div></div>
+   <div class="tbl"><table><thead><tr><th>Trimestre</th><th class="n">IVA repercutido</th><th class="n">IVA soportado</th><th class="n">Resultado</th><th></th></tr></thead><tbody>
+   ${qs.map(x=>`<tr><td><b>${x.q}T</b> <span class="sub">${MES_C[(x.q-1)*3]}–${MES_C[(x.q-1)*3+2]}</span></td><td class="n">${eur(x.r)}</td><td class="n">${eur(x.s)}</td><td class="n"><b>${eur(Math.abs(x.res))}</b></td><td><span class="pill ${x.res>=0?'p-warn':'p-ok'}">${x.res>=0?'A ingresar':'A compensar'}</span></td></tr>`).join('')}
+   </tbody></table></div></div>
+   <div class="card"><div class="ch"><h2>Cobros por método</h2><span class="sub">IVA incluido</span></div>${PAGOS.map(p=>`<div class="hb"><span>${p}</span><span class="bar"><i style="width:${T.ventas?(pay[p]||0)/T.ventas*100:0}%;background:var(--orange)"></i></span><b class="num">${eur0(pay[p]||0)}</b></div>`).join('')}
+   <div class="note">${IC.coins}<span>IVA repercutido en el periodo: <b>${eur(T.ivaR)}</b>. IVA soportado: <b>${eur(T.ivaS)}</b>.</span></div></div></div>`;
+};
+
+V.configuracion=()=>{const s=S.settings;
+  return `${banner()}${head('Ajustes','Configuración','Datos del negocio, impuestos, copias de seguridad y datos de ejemplo.')}
+  <form class="grid-2e" id="cfgform"><div class="card form"><h2>Datos del negocio</h2>
+    <div class="fg"><label class="f">Nombre de la cafetería<input id="c_nombre" name="nombre" value="${esc(s.nombre)}" placeholder="Cafetería La Plaza"></label><label class="f">NIF/CIF<input id="c_nif" name="nif" value="${esc(s.nif)}" placeholder="B12345678"></label></div>
+    <label class="f">Dirección<input id="c_dir" name="direccion" value="${esc(s.direccion)}" placeholder="Calle Mayor 1"></label>
+    <div class="fg"><label class="f">Ciudad<input id="c_ciudad" name="ciudad" value="${esc(s.ciudad)}" placeholder="Tu ciudad"></label><label class="f">País<input id="c_pais" name="pais" value="${esc(s.pais)}" placeholder="España"></label></div>
+    <div><button class="btn pri" type="submit">Guardar cambios</button></div></div>
+   <div class="card form"><h2>Impuestos</h2>
+    <label class="f">Tipos de IVA que usas (separados por comas)<input id="c_ivas" name="ivas" value="${esc(ivaOpc().join(', '))}" placeholder="21, 10, 4, 0"></label>
+    <label class="f">IVA por defecto para la carta<select id="c_ivacarta" name="ivaCarta">${opts(ivaOpc(),s.ivaCarta??10,x=>x+' %')}</select></label>
+    <div class="list"><div class="sub" style="font-weight:600">Referencia: tipos de IVA en España</div>
+     <div class="li"><span class="pill p-info">10 %</span><div class="grow"><b>Reducido</b><span>Hostelería: comidas y bebidas servidas en el local.</span></div></div>
+     <div class="li"><span class="pill p-warn">21 %</span><div class="grow"><b>General</b><span>Alquiler, luz, gestoría y la mayoría de servicios.</span></div></div>
+     <div class="li"><span class="pill p-ok">4 %</span><div class="grow"><b>Superreducido</b><span>Alimentos básicos al comprarlos: pan, leche, fruta, verdura, aceite de oliva.</span></div></div>
+     <div class="li"><span class="pill">0 %</span><div class="grow"><b>Sin IVA</b><span>Nóminas, seguros sociales y operaciones exentas.</span></div></div></div>
+    <div><button class="btn pri" type="submit">Guardar cambios</button></div></div></form>
+  <div class="grid-2e"><div class="card"><h2>Copia de seguridad</h2><p class="sub">Los datos se guardan en este navegador. Descarga una copia cada semana para no perderlos.</p>
+    <div class="actions"><button class="btn pri" data-act="export">${IC.down} Descargar copia</button><button class="btn" data-act="copyexport">${IC.copy} Copiar copia</button><button class="btn" data-act="import">${IC.upl} Restaurar copia</button></div></div>
+   <div class="card"><h2>Datos</h2><p class="sub">Borra los datos de ejemplo para empezar con los tuyos, o vuelve a cargarlos para enseñar la aplicación.</p>
+    <div class="actions"><button class="btn danger" data-act="startfresh">${IC.trash} Empezar desde cero</button><button class="btn" data-act="loadsample">Cargar datos de ejemplo</button></div></div></div>`;
+};
+
+const GLANGS=[['es','Español'],['en','English'],['uk','Українська']];
+const RECETAS_TBL=[['Café solo','8 g café · 7 g azúcar'],['Cortado','8 g café · 40 ml leche · 7 g azúcar'],['Café con leche','8 g café · 150 ml leche · 7 g azúcar'],['Capuchino','8 g café · 120 ml leche · 2 g cacao'],
+ ['Café vienés','8 g café · 40 ml nata · 1 g cacao'],['Chocolate caliente','200 ml leche · 25 g cacao · 10 g azúcar'],['Zumo de naranja','400 g naranjas'],['Croissant','1 ud croissant']];
+const GUIA={
+es:{eb:'Ayuda',title:'Guía de uso',sub:'Todo lo que necesitas para poner en marcha la contabilidad de tu cafetería, paso a paso.',toc:'Índice',tip:'Consejo.',tblH:['Producto','Receta orientativa'],
+ s:[
+ ['g-inicio','Introducción','Antes de empezar',[['p','Esta aplicación lleva la contabilidad diaria de una cafetería: lo que vendes, lo que compras, lo que tienes en el almacén, lo que gastas y lo que ganas. Todo se calcula solo a partir de lo que registras.'],
+   ['p','La puesta en marcha se hace <b>una sola vez</b> y lleva unos 30–60 minutos. Sigue los pasos 1 a 5 en orden. Después, el trabajo diario se reduce a cobrar en caja, registrar la mercancía que llega y apuntar los gastos.'],
+   ['flow',['Datos del negocio','Inventario','Proveedores','Carta y recetas','Día a día']],
+   ['tip','Los datos se guardan en el navegador del dispositivo que uses. Trabaja siempre en el mismo ordenador o tableta y haz una copia de seguridad cada semana (ver «Copias de seguridad»).']]],
+ ['g-negocio','Paso 1','Datos del negocio',[['ol',['Abre <b>Configuración</b> en el menú.','Escribe el nombre de tu cafetería, el NIF/CIF, la dirección, la ciudad y el país. El nombre aparecerá arriba en el menú.',
+   'En <b>Impuestos</b>, revisa los tipos de IVA. Vienen los de España (21, 10, 4 y 0 %). Si trabajas en otro país, escribe los tuyos separados por comas.','Elige el <b>IVA por defecto para la carta</b>. En España la hostelería usa el 10 %.','Pulsa <b>Guardar cambios</b>.']]]],
+ ['g-ejemplo','Paso 2','Borrar los datos de ejemplo',[['p','Al abrir la aplicación por primera vez verás una cafetería ficticia con ventas, compras y gastos de ejemplo. Sirven para ver cómo funciona todo.'],
+   ['ol',['Cuando estés listo, pulsa <b>Empezar desde cero</b> (en el aviso azul o en Configuración → Datos).','Confirma. Se borra todo menos los datos del negocio.']],
+   ['tip','Si quieres volver a ver los ejemplos, usa «Cargar datos de ejemplo» en Configuración. Ojo: sustituye los datos que tengas.']]],
+ ['g-inventario','Paso 3','Dar de alta el inventario',[['p','El inventario son los <b>ingredientes y productos que compras</b>: café en grano, leche, nata, azúcar, pan, cerveza, vasos… No son los productos de la carta.'],
+   ['ol',['Abre <b>Inventario</b> y pulsa <b>Nuevo producto</b>.','Escribe el nombre y la categoría (Lácteos, Panadería, Bebidas…).','Elige la <b>unidad</b> en la que compras: <b>kg</b> para café, azúcar o jamón; <b>L</b> para leche, nata o cerveza; <b>uds</b> para croissants, botellas o vasos.',
+    '<b>Stock actual</b>: lo que tienes hoy en el almacén. Cuenta tus existencias el primer día.','<b>Stock mínimo</b>: por debajo de esta cantidad la aplicación te avisará de que hay que pedir.',
+    '<b>Precio de compra sin IVA</b> y el <b>IVA de compra</b> (en España: leche, pan y fruta al 4 %; café, nata o bollería al 10 %; cerveza, vino y vasos al 21 %).','Pulsa <b>Guardar</b> y repite con cada producto.']],
+   ['tip','Con la unidad kg o L, en las recetas podrás escribir gramos y mililitros. La aplicación hace la conversión sola.']]],
+ ['g-proveedores','Paso 4','Proveedores',[['ol',['Abre <b>Proveedores</b> y pulsa <b>Nuevo proveedor</b>.','Rellena nombre, NIF/CIF, teléfono, correo, dirección y qué te suministra.','Guarda. En cada ficha verás lo comprado este mes, lo pendiente de pago y el historial de albaranes.']]]],
+ ['g-carta','Paso 5','Carta, precios y recetas',[['p','La carta son los productos que vendes en la barra. La <b>receta</b> le dice a la aplicación qué ingredientes se gastan al vender una unidad, para descontarlos del inventario automáticamente.'],
+   ['ol',['Abre <b>Ventas</b> → pestaña <b>Carta y precios</b> → <b>Nuevo producto</b>.','Escribe el nombre, la categoría y el <b>precio de venta con IVA incluido</b> (el que ve el cliente).','En <b>Receta</b>, pulsa <b>Añadir ingrediente</b> por cada ingrediente y escribe la cantidad de <b>una</b> unidad.','Abajo verás el coste por unidad, el margen y el porcentaje de coste. Guarda.']],
+   ['table'],['tip','Un porcentaje de coste por debajo del 35 % (en verde) es saludable. Si sale en rojo, revisa el precio o la receta.'],['tip','Los productos sin receta se venden igual, pero no descuentan nada del inventario.']]],
+ ['g-caja','Día a día','Cobrar en caja',[['ol',['Abre <b>Ventas</b> → pestaña <b>Caja</b>.','Toca los productos que pide el cliente. Cada toque suma una unidad al ticket. Usa <b>+</b> y <b>−</b> para corregir.','Comprueba el total y pulsa el método de pago: <b>Efectivo</b>, <b>Tarjeta</b> o <b>Bizum</b>.','La venta queda guardada y los ingredientes de las recetas se descuentan del inventario. Si algo baja del mínimo, verás un aviso.']],
+   ['p','En <b>Historial de ventas</b> puedes consultar cualquier día o periodo, ver el total por método de pago (útil para el cierre de caja) y el IVA repercutido.'],
+   ['tip','Si cobraste algo por error, bórralo en el Historial: la venta desaparece y los ingredientes vuelven al inventario.']]],
+ ['g-recepcion','Día a día','Recibir mercancía',[['ol',['Cuando llegue un pedido, abre <b>Recepción de mercancías</b> → <b>Registrar entrada</b>.','Elige la fecha, el proveedor y escribe el número de albarán.','Añade una línea por producto: producto, cantidad, precio sin IVA e IVA. El precio se rellena con el último que pagaste.','Elige el estado: <b>Recibido</b>, <b>Pendiente de pago</b> o <b>Pagado</b>, y guarda.']],
+   ['p','El stock sube automáticamente y el precio de compra del producto se actualiza. Para cambiar el estado más tarde, toca la etiqueta de estado en la tabla.']]],
+ ['g-salidas','Día a día','Salidas, mermas y recuento',[['p','Usa <b>Registrar salida</b> en Inventario para lo que se gasta sin pasar por caja: producto caducado o roto, consumo del personal, invitaciones.'],
+   ['ol',['Pulsa <b>Registrar salida</b> (o el botón <b>Salida</b> de la fila).','Elige producto, cantidad, fecha y motivo. Guarda.']],
+   ['p','<b>Recuento.</b> Una vez a la semana cuenta el almacén. Si el número real no coincide, pulsa el lápiz del producto y corrige el stock: queda registrado como «Ajuste de inventario».']]],
+ ['g-gastos','Día a día','Registrar gastos',[['p','Aquí van los gastos que <b>no son mercancía</b>: alquiler, luz, agua, gas, nóminas, seguros sociales, gestoría, teléfono, reparaciones.'],
+   ['ol',['Abre <b>Gastos</b> → <b>Añadir gasto</b>.','Escribe la fecha, la categoría y el concepto.','Escribe la <b>base imponible</b> (el importe sin IVA de la factura) y elige el IVA. El total se calcula solo.','Elige cómo lo pagaste y guarda.']],
+   ['tip','Las nóminas y los seguros sociales no llevan IVA: elige 0 %. Las compras a proveedores no se apuntan aquí, sino en Recepción de mercancías, para no contarlas dos veces.']]],
+ ['g-informes','Control','Leer los informes',[['ul',['<b>Ingresos</b>: lo vendido sin IVA.','<b>Compras</b>: la mercancía recibida, sin IVA.','<b>Gastos</b>: el resto de gastos, sin IVA.','<b>Beneficio neto</b> = ingresos − compras − gastos.','<b>Margen</b>: qué parte de cada euro vendido es beneficio.']],
+   ['p','La tabla <b>IVA trimestral</b> compara el IVA que cobras a los clientes (repercutido) con el que pagas a proveedores y en gastos (soportado). Si sale «A ingresar», es lo que previsiblemente tendrás que pagar a Hacienda en la declaración trimestral (Modelo 303 en España).'],
+   ['tip','Los informes son una ayuda para controlar el negocio. Las declaraciones oficiales confírmalas siempre con tu gestoría o asesor.']]],
+ ['g-copias','Seguridad','Copias de seguridad',[['ol',['Abre <b>Configuración</b> → <b>Descargar copia</b>. Se guarda un archivo con todos tus datos.','Guárdalo en un lugar seguro (correo, nube, memoria USB). Hazlo al menos una vez por semana.','Para recuperar los datos o pasarlos a otro dispositivo, abre la aplicación allí y pulsa <b>Restaurar copia</b>.']],
+   ['tip','Si borras el historial o los datos del navegador, la información se pierde. Con una copia reciente la recuperas en un minuto.']]],
+ ['g-faq','Dudas','Preguntas frecuentes',[['faq',[['¿Puedo usarla en el móvil?','Sí. El menú pasa arriba y todo se adapta a la pantalla. Recuerda que los datos son de cada dispositivo.'],
+   ['Vendo un producto que no lleva receta, ¿pasa algo?','No. Se cobra normalmente; solo no descuenta ingredientes.'],['Cambié el precio de un producto. ¿Afecta a las ventas antiguas?','No. Cada venta guarda el precio con el que se cobró.'],
+   ['Cambié una receta. ¿Se recalcula el inventario pasado?','No. La nueva receta se aplica a las ventas desde ese momento.'],['El stock sale distinto del real.','Suele deberse a mermas no registradas o a recetas con cantidades diferentes a las reales. Corrige el stock con el lápiz y ajusta las recetas.'],
+   ['Trabajo en otro país.','Escribe tu país y tus tipos de IVA en Configuración. La moneda de la aplicación es el euro.']]]]]
+ ]},
+en:{eb:'Help',title:'User guide',sub:'Everything you need to set up your café’s bookkeeping, step by step. The app itself is in Spanish, so button names are shown in Spanish.',toc:'Contents',tip:'Tip.',tblH:['Product','Suggested recipe'],
+ s:[
+ ['g-inicio','Introduction','Before you start',[['p','This app keeps the day-to-day books of a café: what you sell, what you buy, what is in stock, what you spend and what you earn. Everything is calculated from what you record.'],
+   ['p','Setup is done <b>only once</b> and takes about 30–60 minutes. Follow steps 1 to 5 in order. After that, daily work is just ringing up sales, recording deliveries and entering expenses.'],
+   ['flow',['Business details','Inventory','Suppliers','Menu and recipes','Daily work']],
+   ['tip','Data is saved in the browser of the device you use. Always work on the same computer or tablet and make a backup every week (see “Backups”).']]],
+ ['g-negocio','Step 1','Business details',[['ol',['Open <b>Configuración</b> (Settings) in the menu.','Enter your café’s name, tax ID (NIF/CIF), address, city and country. The name will appear at the top of the menu.',
+   'Under <b>Impuestos</b> (Taxes), check the VAT rates. Spain’s rates come preset (21, 10, 4 and 0 %). If you work in another country, type your own, separated by commas.','Choose the <b>IVA por defecto para la carta</b> (default VAT for menu items). In Spain, hospitality uses 10 %.','Press <b>Guardar cambios</b> (Save changes).']]]],
+ ['g-ejemplo','Step 2','Remove the sample data',[['p','The first time you open the app you will see a fictional café with sample sales, purchases and expenses. They show how everything works.'],
+   ['ol',['When you are ready, press <b>Empezar desde cero</b> (Start from scratch) in the blue notice or in Configuración → Datos.','Confirm. Everything is deleted except your business details.']],
+   ['tip','To see the samples again, use “Cargar datos de ejemplo” (Load sample data) in Configuración. Careful: it replaces your current data.']]],
+ ['g-inventario','Step 3','Set up your inventory',[['p','The inventory is the <b>ingredients and goods you buy</b>: coffee beans, milk, cream, sugar, bread, beer, cups… It is not the menu.'],
+   ['ol',['Open <b>Inventario</b> (Inventory) and press <b>Nuevo producto</b> (New product).','Enter the name and category (Lácteos = dairy, Panadería = bakery, Bebidas = drinks…).','Choose the <b>unit</b> you buy in: <b>kg</b> for coffee, sugar or ham; <b>L</b> for milk, cream or beer; <b>uds</b> (units) for croissants, bottles or cups.',
+    '<b>Stock actual</b> (current stock): what you have today. Count your stock on day one.','<b>Stock mínimo</b> (minimum stock): below this amount the app warns you to reorder.',
+    '<b>Purchase price without VAT</b> and <b>purchase VAT</b> (in Spain: milk, bread and fruit 4 %; coffee, cream or pastries 10 %; beer, wine and cups 21 %).','Press <b>Guardar</b> (Save) and repeat for each product.']],
+   ['tip','With kg or L as the unit, you can write grams and millilitres in recipes. The app converts automatically.']]],
+ ['g-proveedores','Step 4','Suppliers',[['ol',['Open <b>Proveedores</b> (Suppliers) and press <b>Nuevo proveedor</b> (New supplier).','Fill in name, tax ID, phone, email, address and what they supply.','Save. Each card shows this month’s purchases, unpaid amounts and delivery history.']]]],
+ ['g-carta','Step 5','Menu, prices and recipes',[['p','The menu (<b>carta</b>) is what you sell at the counter. The <b>recipe</b> (<b>receta</b>) tells the app which ingredients are used for one item, so they are deducted from stock automatically.'],
+   ['ol',['Open <b>Ventas</b> (Sales) → <b>Carta y precios</b> tab → <b>Nuevo producto</b>.','Enter the name, category and the <b>selling price including VAT</b> (what the customer pays).','Under <b>Receta</b>, press <b>Añadir ingrediente</b> (Add ingredient) for each ingredient and enter the amount for <b>one</b> item.','Below you will see the cost per item, the margin and the cost percentage. Save.']],
+   ['table'],['tip','A cost percentage under 35 % (green) is healthy. If it shows red, check the price or the recipe.'],['tip','Items without a recipe can still be sold; they simply don’t deduct anything from stock.']]],
+ ['g-caja','Daily work','Ringing up sales',[['ol',['Open <b>Ventas</b> → <b>Caja</b> (Till) tab.','Tap the items the customer orders. Each tap adds one unit to the ticket. Use <b>+</b> and <b>−</b> to correct.','Check the total and tap the payment method: <b>Efectivo</b> (cash), <b>Tarjeta</b> (card) or <b>Bizum</b>.','The sale is saved and recipe ingredients are deducted from stock. If something falls below its minimum, you will see a warning.']],
+   ['p','In <b>Historial de ventas</b> (Sales history) you can view any day or period, totals by payment method (handy for closing the till) and output VAT.'],
+   ['tip','If you rang something up by mistake, delete it in the history: the sale disappears and the ingredients go back into stock.']]],
+ ['g-recepcion','Daily work','Receiving deliveries',[['ol',['When an order arrives, open <b>Recepción de mercancías</b> (Goods received) → <b>Registrar entrada</b> (Record delivery).','Choose the date and supplier and enter the delivery note number (albarán).','Add one line per product: product, quantity, price without VAT and VAT. The price fills in with the last one you paid.','Choose the status: <b>Recibido</b> (received), <b>Pendiente de pago</b> (unpaid) or <b>Pagado</b> (paid), and save.']],
+   ['p','Stock goes up automatically and the product’s purchase price is updated. To change the status later, tap the status label in the table.']]],
+ ['g-salidas','Daily work','Write-offs, waste and stock counts',[['p','Use <b>Registrar salida</b> (Record write-off) in Inventario for anything used without going through the till: expired or broken goods, staff consumption, items on the house.'],
+   ['ol',['Press <b>Registrar salida</b> (or the <b>Salida</b> button on the row).','Choose product, quantity, date and reason. Save.']],
+   ['p','<b>Stock count.</b> Count the storeroom once a week. If the real number is different, press the pencil on the product and correct the stock; it is recorded as an inventory adjustment.']]],
+ ['g-gastos','Daily work','Recording expenses',[['p','This is for expenses that <b>are not goods</b>: rent, electricity, water, gas, wages, social security, accountant, phone, repairs.'],
+   ['ol',['Open <b>Gastos</b> (Expenses) → <b>Añadir gasto</b> (Add expense).','Enter the date, category and description.','Enter the <b>base imponible</b> (invoice amount without VAT) and choose the VAT. The total is calculated for you.','Choose how you paid and save.']],
+   ['tip','Wages and social security have no VAT: choose 0 %. Supplier purchases are not entered here but in Recepción de mercancías, so they are not counted twice.']]],
+ ['g-informes','Control','Reading the reports',[['ul',['<b>Ingresos</b> (income): sales without VAT.','<b>Compras</b> (purchases): goods received, without VAT.','<b>Gastos</b> (expenses): other expenses, without VAT.','<b>Beneficio neto</b> (net profit) = income − purchases − expenses.','<b>Margen</b> (margin): how much of each euro sold is profit.']],
+   ['p','The <b>IVA trimestral</b> (quarterly VAT) table compares the VAT you charge customers with the VAT you pay suppliers and on expenses. “A ingresar” is roughly what you will owe the tax office in the quarterly return (Modelo 303 in Spain).'],
+   ['tip','Reports help you run the business. Always confirm official tax returns with your accountant.']]],
+ ['g-copias','Safety','Backups',[['ol',['Open <b>Configuración</b> → <b>Descargar copia</b> (Download backup). A file with all your data is saved.','Keep it somewhere safe (email, cloud, USB stick). Do it at least once a week.','To recover data or move it to another device, open the app there and press <b>Restaurar copia</b> (Restore backup).']],
+   ['tip','If you clear the browser’s history or site data, the information is lost. With a recent backup you get it back in a minute.']]],
+ ['g-faq','Questions','Frequently asked questions',[['faq',[['Can I use it on my phone?','Yes. The menu moves to the top and everything fits the screen. Remember that data belongs to each device.'],
+   ['I sell an item with no recipe. Is that a problem?','No. It is sold as usual; it just doesn’t deduct ingredients.'],['I changed a price. Does it affect old sales?','No. Each sale keeps the price it was sold at.'],
+   ['I changed a recipe. Is past stock recalculated?','No. The new recipe applies to sales from that moment on.'],['Stock doesn’t match reality.','Usually because of unrecorded waste or recipes that differ from real portions. Correct the stock with the pencil and adjust the recipes.'],
+   ['I work in another country.','Enter your country and VAT rates in Configuración. The app’s currency is the euro.']]]]]
+ ]},
+uk:{eb:'Довідка',title:'Інструкція',sub:'Усе, що потрібно, щоб налаштувати облік кав’ярні, крок за кроком. Сам застосунок іспанською, тому назви кнопок подано іспанською.',toc:'Зміст',tip:'Порада.',tblH:['Позиція','Орієнтовний рецепт'],
+ s:[
+ ['g-inicio','Вступ','Перш ніж почати',[['p','Цей застосунок веде щоденний облік кав’ярні: що ви продаєте, що купуєте, що є на складі, скільки витрачаєте і скільки заробляєте. Усе рахується автоматично з того, що ви вносите.'],
+   ['p','Налаштування робиться <b>лише один раз</b> і займає 30–60 хвилин. Виконайте кроки 1–5 по черзі. Далі щоденна робота — це продажі на касі, прийом товару й запис витрат.'],
+   ['flow',['Дані закладу','Склад','Постачальники','Меню й рецепти','Щоденна робота']],
+   ['tip','Дані зберігаються в браузері пристрою, яким ви користуєтеся. Працюйте завжди на тому самому комп’ютері чи планшеті й щотижня робіть резервну копію (див. «Резервні копії»).']]],
+ ['g-negocio','Крок 1','Дані закладу',[['ol',['Відкрийте в меню <b>Configuración</b> (Налаштування).','Впишіть назву кав’ярні, податковий номер (NIF/CIF), адресу, місто й країну. Назва з’явиться вгорі меню.',
+   'У блоці <b>Impuestos</b> (Податки) перевірте ставки ПДВ (IVA). Стоять іспанські: 21, 10, 4 і 0 %. Якщо ви працюєте в іншій країні, впишіть свої через кому.','Виберіть <b>IVA por defecto para la carta</b> — ставку за замовчуванням для меню. В Іспанії для закладів харчування це 10 %.','Натисніть <b>Guardar cambios</b> (Зберегти зміни).']]]],
+ ['g-ejemplo','Крок 2','Видалення прикладів',[['p','Під час першого відкриття ви побачите вигадану кав’ярню з прикладами продажів, закупівель і витрат. Вони показують, як усе працює.'],
+   ['ol',['Коли будете готові, натисніть <b>Empezar desde cero</b> (Почати з нуля) у блакитному повідомленні або в Configuración → Datos.','Підтвердьте. Видаляється все, крім даних закладу.']],
+   ['tip','Щоб знову побачити приклади, натисніть «Cargar datos de ejemplo» (Завантажити приклади) у Configuración. Увага: це замінить ваші поточні дані.']]],
+ ['g-inventario','Крок 3','Заповнення складу',[['p','Склад — це <b>інгредієнти й товари, які ви купуєте</b>: кава в зернах, молоко, вершки, цукор, хліб, пиво, стаканчики… Це не позиції меню.'],
+   ['ol',['Відкрийте <b>Inventario</b> (Склад) і натисніть <b>Nuevo producto</b> (Новий товар).','Впишіть назву й категорію (Lácteos — молочне, Panadería — випічка, Bebidas — напої…).','Виберіть <b>одиницю</b>, в якій купуєте: <b>kg</b> — кава, цукор, шинка; <b>L</b> — молоко, вершки, пиво; <b>uds</b> (штуки) — круасани, пляшки, стаканчики.',
+    '<b>Stock actual</b> — скільки товару є сьогодні. Першого дня перерахуйте залишки.','<b>Stock mínimo</b> — мінімальний залишок: нижче цієї кількості застосунок нагадає, що час замовляти.',
+    '<b>Ціна закупівлі без ПДВ</b> і <b>ПДВ закупівлі</b> (в Іспанії: молоко, хліб, фрукти — 4 %; кава, вершки, випічка — 10 %; пиво, вино, стаканчики — 21 %).','Натисніть <b>Guardar</b> (Зберегти) і повторіть для кожного товару.']],
+   ['tip','Якщо одиниця kg або L, у рецептах можна писати грами й мілілітри. Застосунок перерахує сам.']]],
+ ['g-proveedores','Крок 4','Постачальники',[['ol',['Відкрийте <b>Proveedores</b> (Постачальники) і натисніть <b>Nuevo proveedor</b> (Новий постачальник).','Заповніть назву, податковий номер, телефон, пошту, адресу й що він постачає.','Збережіть. У картці видно закупівлі за місяць, неоплачені суми й історію накладних.']]]],
+ ['g-carta','Крок 5','Меню, ціни й рецепти',[['p','Меню (<b>carta</b>) — це те, що ви продаєте відвідувачам. <b>Рецепт</b> (<b>receta</b>) показує застосунку, які інгредієнти йдуть на одну порцію, щоб автоматично списувати їх зі складу.'],
+   ['ol',['Відкрийте <b>Ventas</b> (Продажі) → вкладку <b>Carta y precios</b> → <b>Nuevo producto</b>.','Впишіть назву, категорію й <b>ціну продажу з ПДВ</b> (те, що платить відвідувач).','У блоці <b>Receta</b> натискайте <b>Añadir ingrediente</b> (Додати інгредієнт) для кожного інгредієнта й вписуйте кількість на <b>одну</b> порцію.','Нижче з’являться собівартість порції, маржа й відсоток собівартості. Збережіть.']],
+   ['table'],['tip','Собівартість до 35 % від ціни (зелена позначка) — добрий показник. Якщо позначка червона, перегляньте ціну або рецепт.'],['tip','Позиції без рецепта теж продаються, просто нічого не списують зі складу.']]],
+ ['g-caja','Щоденна робота','Продаж на касі',[['ol',['Відкрийте <b>Ventas</b> → вкладку <b>Caja</b> (Каса).','Натискайте на позиції, які замовив відвідувач. Кожне натискання додає одну порцію в чек. Кнопками <b>+</b> і <b>−</b> можна виправити кількість.','Перевірте суму й натисніть спосіб оплати: <b>Efectivo</b> (готівка), <b>Tarjeta</b> (картка) або <b>Bizum</b>.','Продаж збережено, інгредієнти з рецептів списано зі складу. Якщо щось опустилося нижче мінімуму, з’явиться попередження.']],
+   ['p','В <b>Historial de ventas</b> (Історія продажів) можна переглянути будь-який день чи період, суми за способами оплати (зручно для закриття каси) і нарахований ПДВ.'],
+   ['tip','Якщо продаж пробито помилково, видаліть його в історії: продаж зникне, а інгредієнти повернуться на склад.']]],
+ ['g-recepcion','Щоденна робота','Прийом товару',[['ol',['Коли привезли замовлення, відкрийте <b>Recepción de mercancías</b> (Прийом товару) → <b>Registrar entrada</b> (Записати надходження).','Виберіть дату, постачальника й впишіть номер накладної (albarán).','Додайте рядок на кожен товар: товар, кількість, ціна без ПДВ і ставка ПДВ. Ціна підставляється з останньої закупівлі.','Виберіть статус: <b>Recibido</b> (отримано), <b>Pendiente de pago</b> (очікує оплати) або <b>Pagado</b> (оплачено) — і збережіть.']],
+   ['p','Залишок на складі збільшується автоматично, а ціна закупівлі оновлюється. Щоб змінити статус пізніше, натисніть на позначку статусу в таблиці.']]],
+ ['g-salidas','Щоденна робота','Списання, втрати й інвентаризація',[['p','Кнопка <b>Registrar salida</b> (Записати списання) у розділі Inventario — для всього, що витрачено поза касою: прострочений чи пошкоджений товар, харчування персоналу, частування.'],
+   ['ol',['Натисніть <b>Registrar salida</b> (або кнопку <b>Salida</b> у рядку товару).','Виберіть товар, кількість, дату й причину. Збережіть.']],
+   ['p','<b>Інвентаризація.</b> Раз на тиждень перераховуйте склад. Якщо фактична кількість інша, натисніть олівець біля товару й виправте залишок — це запишеться як коригування складу.']]],
+ ['g-gastos','Щоденна робота','Запис витрат',[['p','Сюди вносяться витрати, які <b>не є товаром</b>: оренда, світло, вода, газ, зарплати, соціальні внески, бухгалтер, телефон, ремонт.'],
+   ['ol',['Відкрийте <b>Gastos</b> (Витрати) → <b>Añadir gasto</b> (Додати витрату).','Впишіть дату, категорію й опис.','Впишіть <b>base imponible</b> — суму рахунку без ПДВ — і виберіть ставку ПДВ. Загальна сума порахується сама.','Виберіть спосіб оплати й збережіть.']],
+   ['tip','Зарплати й соціальні внески без ПДВ — вибирайте 0 %. Закупівлі в постачальників вносьте не тут, а в Recepción de mercancías, щоб не порахувати їх двічі.']]],
+ ['g-informes','Контроль','Як читати звіти',[['ul',['<b>Ingresos</b> (доходи): продажі без ПДВ.','<b>Compras</b> (закупівлі): отриманий товар без ПДВ.','<b>Gastos</b> (витрати): інші витрати без ПДВ.','<b>Beneficio neto</b> (чистий прибуток) = доходи − закупівлі − витрати.','<b>Margen</b> (маржа): яка частина кожного проданого євро є прибутком.']],
+   ['p','Таблиця <b>IVA trimestral</b> (ПДВ за квартал) порівнює ПДВ, отриманий від відвідувачів, із ПДВ, сплаченим постачальникам і за витрати. «A ingresar» — орієнтовна сума до сплати в податкову за квартальною декларацією (в Іспанії це Modelo 303).'],
+   ['tip','Звіти допомагають керувати закладом. Офіційні декларації завжди уточнюйте зі своїм бухгалтером.']]],
+ ['g-copias','Безпека','Резервні копії',[['ol',['Відкрийте <b>Configuración</b> → <b>Descargar copia</b> (Завантажити копію). Збережеться файл з усіма вашими даними.','Зберігайте його в надійному місці (пошта, хмара, флешка). Робіть це щонайменше раз на тиждень.','Щоб відновити дані або перенести їх на інший пристрій, відкрийте там застосунок і натисніть <b>Restaurar copia</b> (Відновити копію).']],
+   ['tip','Якщо очистити історію чи дані браузера, інформація зникне. Зі свіжою копією ви відновите її за хвилину.']]],
+ ['g-faq','Питання','Часті запитання',[['faq',[['Чи можна користуватися з телефона?','Так. Меню переходить угору, і все підлаштовується під екран. Пам’ятайте: дані зберігаються окремо на кожному пристрої.'],
+   ['Я продаю позицію без рецепта. Це проблема?','Ні. Вона продається як звичайно, просто нічого не списує зі складу.'],['Я змінив ціну. Чи зміняться старі продажі?','Ні. Кожен продаж зберігає ціну, за якою його пробито.'],
+   ['Я змінив рецепт. Чи перерахується минуле списання?','Ні. Новий рецепт діє для продажів із цього моменту.'],['Залишок на складі не збігається з фактичним.','Зазвичай через незаписані втрати або рецепти, що відрізняються від реальних порцій. Виправте залишок олівцем і скоригуйте рецепти.'],
+   ['Я працюю в іншій країні.','Впишіть свою країну й ставки ПДВ у Configuración. Валюта застосунку — євро.']]]]]
+ ]}
+};
+function gLang(){if(UI.glang)return UI.glang;try{const l=localStorage.getItem(KEY+'_guia');if(GUIA[l])return UI.glang=l}catch(e){}return UI.glang='es'}
+V.guia=()=>{
+  const L=gLang(),G=GUIA[L];
+  const blk=b=>{const[k,v]=b;
+    if(k==='p')return `<p>${v}</p>`;if(k==='tip')return `<div class="tip"><b>${G.tip}</b> ${v}</div>`;
+    if(k==='ol')return `<ol class="steps">${v.map(x=>`<li><span>${x}</span></li>`).join('')}</ol>`;if(k==='ul')return `<ul class="dots">${v.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+    if(k==='flow')return `<div class="flow">${v.map((x,i)=>`<span><b>${i+1}</b>${x}</span>`).join('')}</div>`;
+    if(k==='faq')return `<dl class="faq">${v.map(([q,a])=>`<dt>${q}</dt><dd>${a}</dd>`).join('')}</dl>`;
+    if(k==='table')return `<div class="tbl"><table><thead><tr><th>${G.tblH[0]}</th><th>${G.tblH[1]}</th></tr></thead><tbody>${RECETAS_TBL.map(([a,b])=>`<tr><td>${a}</td><td>${b}</td></tr>`).join('')}</tbody></table></div>`;return ''};
+  return `<div class="head"><div><div class="eyebrow">${G.eb}</div><h1>${G.title}</h1><p>${G.sub}</p></div>
+   <div class="tabs" role="tablist" aria-label="Idioma / Language / Мова">${GLANGS.map(([k,l])=>`<button class="tab ${L===k?'on':''}" data-act="glang" data-id="${k}" role="tab" aria-selected="${L===k}" lang="${k}">${l}</button>`).join('')}</div></div>
+  <div class="guide" lang="${L}">
+  <nav class="card toc" aria-label="${G.toc}"><div class="eyebrow">${G.toc}</div><div class="chips">${G.s.map(([id,,t],i)=>`<button class="chip" data-act="goto" data-id="${id}">${i>=1&&i<=5?i+'. ':''}${t}</button>`).join('')}</div></nav>
+  ${G.s.map(([id,eb,t,body])=>`<section class="card gs" id="${id}"><div class="eyebrow">${eb}</div><h2>${t}</h2>${body.map(blk).join('')}</section>`).join('')}
+  </div>`;
+};
+
+/* ===================== Render ===================== */
+function render(){
+  let r=location.hash.slice(1);if(!V[r])r='panel';
+  $('#nav').innerHTML=NAV.map(([k,l])=>`<a href="#${k}" class="${k===r?'on':''}" ${k===r?'aria-current="page"':''}>${IC[k]}<span>${l}</span></a>`).join('');
+  $('#bname').textContent=S.settings.nombre||'Tu cafetería';
+  $('#bsub').textContent='Contabilidad'+(S.settings.ciudad?' · '+S.settings.ciudad:'');
+  $('#view').innerHTML=V[r]()+`<footer class="credit"><span>Creado por <b>Halyna Haidai</b> (Галина Гайдай)</span><span>© ${new Date().getFullYear()} ai.lab.creative · Todos los derechos reservados</span></footer>`;
+  document.title=(S.settings.nombre?S.settings.nombre+' · ':'')+'Contabilidad Cafetería';
+}
+window.addEventListener('hashchange',()=>{render();window.scrollTo(0,0)});
+
+/* ===================== Modal y avisos ===================== */
+let onSub=null;
+function modal(title,body,{submit='Guardar',wide=false,danger=false}={},fn){
+  $('#mtitle').textContent=title;$('#mbody').innerHTML=body;$('#merr').textContent='';
+  const b=$('#msubmit');b.textContent=submit;b.className='btn '+(danger?'danger':'pri');
+  $('#mform').classList.toggle('wide',wide);onSub=fn;$('#modal').hidden=false;
+  setTimeout(()=>{const f=$('#mbody input:not([type=hidden]),#mbody select');f&&f.focus()},40);
+}
+function close_(){$('#modal').hidden=true;onSub=null}
+function ferr(m){$('#merr').textContent=m;return false}
+function confirmar(msg,label,fn){modal('¿Estás seguro?',`<p style="margin:0">${msg}</p>`,{submit:label,danger:true},()=>{fn()})}
+let tt;function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,2600)}
+$('#mform').addEventListener('submit',e=>{e.preventDefault();if(!onSub)return;const fd=Object.fromEntries(new FormData(e.target));if(onSub(fd)!==false){close_();save();render()}});
+$('#modal').addEventListener('click',e=>{if(e.target.id==='modal')close_()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#modal').hidden)close_()});
+
+const opts=(arr,sel,fmt=x=>x)=>arr.map(x=>`<option value="${esc(x)}" ${String(x)===String(sel)?'selected':''}>${esc(fmt(x))}</option>`).join('');
+const ivaSel=(name,sel)=>`<select name="${name}" id="${name}">${opts(ivaOpc(),sel,x=>x+' %')}</select>`;
+const dlist=(id,arr)=>`<datalist id="${id}">${[...new Set(arr)].map(x=>`<option value="${esc(x)}">`).join('')}</datalist>`;
+
+/* ===================== Formularios ===================== */
+function recRow(r={}){const sel=S.insumos.find(x=>x.id===r.insumoId);return `<div class="r-row"><select class="r-ins" aria-label="Ingrediente"><option value="">Elige ingrediente…</option>${S.insumos.map(i=>`<option value="${i.id}" ${r.insumoId===i.id?'selected':''}>${esc(i.nombre)}</option>`).join('')}</select>
+  <input class="r-c" inputmode="decimal" placeholder="Cantidad" aria-label="Cantidad por unidad" value="${sel?qn(r.cant*rFac(sel.unidad)):''}"><span class="r-u">${sel?rUnit(sel.unidad):''}</span><button type="button" class="ib" data-act="rmrec" aria-label="Quitar ingrediente">${IC.trash}</button></div>`}
+function recCost(){const el=$('#rtot');if(!el)return;let co=0;$$('#recs .r-row').forEach(r=>{const i=S.insumos.find(x=>x.id===r.querySelector('.r-ins').value);if(i)co+=num(r.querySelector('.r-c').value)/rFac(i.unidad)*i.coste});
+  const iv=num(($('#mbody select[name=iva]')||{}).value),neto=num($('#f_precio').value)/(1+iv/100),fc=neto?co/neto*100:0;
+  el.innerHTML=`<span>Coste por unidad: <b>${eur(co)}</b></span><span>Precio sin IVA: <b>${eur(neto)}</b></span><span>Margen: <b>${eur(neto-co)}</b></span><span>Coste: <b>${neto?pct(fc):'—'}</b></span>`}
+function formCarta(c){c=c||{nombre:'',cat:'',precio:'',iva:S.settings.ivaCarta??10,receta:[]};
+  modal(c.id?'Editar producto de la carta':'Nuevo producto de la carta',`<div class="form">
+   <label class="f">Nombre<input name="nombre" id="f_nombre" value="${esc(c.nombre)}" placeholder="Café con leche"></label>
+   <div class="fg"><label class="f">Categoría<input name="cat" id="f_cat" list="dl_cat" value="${esc(c.cat)}" placeholder="Cafés"></label>${dlist('dl_cat',['Cafés','Bebidas','Bollería','Tostadas y bocadillos','Con alcohol',...S.carta.map(x=>x.cat)])}
+   <label class="f">IVA${ivaSel('iva',c.iva)}</label></div>
+   <label class="f">Precio de venta (IVA incluido)<input name="precio" id="f_precio" inputmode="decimal" value="${c.precio!==''?String(c.precio).replace('.',','):''}" placeholder="1,70"></label>
+   <div><b style="font-size:15px">Receta</b><div class="sub">Ingredientes que se gastan al vender <b>una</b> unidad. Por ejemplo, un café con leche: 8 g de café, 150 ml de leche y 7 g de azúcar.</div></div>
+   ${S.insumos.length?`<div id="recs" class="form" style="gap:8px">${(c.receta&&c.receta.length?c.receta:[{}]).map(recRow).join('')}</div>
+   <div><button type="button" class="btn sm" data-act="addrec">${IC.plus} Añadir ingrediente</button></div><div class="sumbox" id="rtot"></div>`:'<div class="tag">Primero añade ingredientes en Inventario para poder crear la receta.</div>'}</div>`,{wide:true},f=>{
+   if(!f.nombre.trim())return ferr('Escribe el nombre del producto.');const p=num(f.precio);if(p<=0)return ferr('Indica un precio mayor que 0.');
+   const receta=[];for(const r of $$('#recs .r-row')){const id=r.querySelector('.r-ins').value,q=num(r.querySelector('.r-c').value);if(!id&&!q)continue;
+     if(!id)return ferr('Elige el ingrediente en todas las líneas de la receta.');if(q<=0)return ferr('Indica la cantidad de cada ingrediente.');
+     const i=S.insumos.find(x=>x.id===id),ex=receta.find(x=>x.insumoId===id),cant=r4(q/rFac(i.unidad));if(ex)ex.cant=r4(ex.cant+cant);else receta.push({insumoId:id,cant})}
+   const o={nombre:f.nombre.trim(),cat:f.cat.trim()||'Otros',precio:r2(p),iva:+f.iva,receta};
+   if(c.id)Object.assign(S.carta.find(x=>x.id===c.id),o);else S.carta.push({id:uid(),...o});toast('Producto guardado')});recCost()}
+
+function lineRow(l={}){return `<div class="l-row"><select class="l-ins" name="li" aria-label="Producto"><option value="">Elige producto…</option>${S.insumos.map(i=>`<option value="${i.id}" ${l.insumoId===i.id?'selected':''}>${esc(i.nombre)} (${esc(i.unidad)})</option>`).join('')}</select>
+  <input class="l-c" inputmode="decimal" placeholder="Cant." aria-label="Cantidad" value="${l.cant??''}"><input class="l-p" inputmode="decimal" placeholder="Precio sin IVA" aria-label="Precio de compra sin IVA" value="${l.coste!=null?String(l.coste).replace('.',','):''}">
+  <select class="l-i" aria-label="IVA">${opts(ivaOpc(),l.iva??10,x=>x+' %')}</select><button type="button" class="ib" data-act="rmline" aria-label="Quitar línea">${IC.trash}</button></div>`}
+function lineTotals(){let b=0,iv=0;$$('#lines .l-row').forEach(r=>{const c=num(r.querySelector('.l-c').value),p=num(r.querySelector('.l-p').value),i=+r.querySelector('.l-i').value;b+=c*p;iv+=c*p*i/100});
+  const el=$('#ltot');if(el)el.innerHTML=`<span>Base: <b>${eur(b)}</b></span><span>IVA: <b>${eur(iv)}</b></span><span>Total: <b>${eur(b+iv)}</b></span>`}
+function formEntrada(){
+  if(!S.insumos.length){toast('Primero añade productos en Inventario');location.hash='inventario';return}
+  modal('Registrar entrada de mercancía',`<div class="form">
+   <div class="fg"><label class="f">Fecha de recepción<input type="date" name="fecha" id="e_fecha" value="${today()}"></label>
+   <label class="f">Proveedor<select name="prov" id="e_prov"><option value="">— Sin proveedor —</option>${S.proveedores.map(p=>`<option value="${p.id}">${esc(p.nombre)}</option>`).join('')}</select></label></div>
+   <div class="fg"><label class="f">Número de albarán<input name="albaran" id="e_alb" placeholder="ALB-0001"></label><label class="f">Estado<select name="estado" id="e_estado">${opts(ESTADOS,'Recibido')}</select></label></div>
+   <div class="l-row l-head"><span>Producto</span><span>Cantidad</span><span>Precio sin IVA</span><span>IVA</span><span></span></div>
+   <div id="lines" class="form" style="gap:8px">${lineRow()}</div>
+   <div><button type="button" class="btn sm" data-act="addline">${IC.plus} Añadir línea</button></div>
+   <div class="sumbox" id="ltot"></div></div>`,{wide:true,submit:'Guardar entrada'},f=>{
+   const lineas=[];for(const r of $$('#lines .l-row')){const id=r.querySelector('.l-ins').value,c=num(r.querySelector('.l-c').value),p=num(r.querySelector('.l-p').value),iv=+r.querySelector('.l-i').value;
+     if(!id&&!c)continue;if(!id)return ferr('Elige el producto en todas las líneas.');if(c<=0)return ferr('Indica una cantidad mayor que 0.');const i=S.insumos.find(x=>x.id===id);lineas.push({insumoId:id,nombre:i.nombre,cant:c,coste:r2(p),iva:iv})}
+   if(!lineas.length)return ferr('Añade al menos un producto.');
+   const e={id:uid(),fecha:f.fecha||today(),proveedorId:f.prov,albaran:f.albaran.trim()||'S/N',lineas,estado:f.estado};S.entradas.push(e);
+   lineas.forEach(l=>{const i=S.insumos.find(x=>x.id===l.insumoId);i.stock=r2(i.stock+l.cant);if(l.coste>0){i.coste=l.coste;i.iva=l.iva}
+     S.movimientos.push({id:uid(),fecha:e.fecha,hora:nowTime(),insumoId:i.id,nombre:i.nombre,tipo:'entrada',cant:l.cant,motivo:'Albarán '+e.albaran})});
+   toast('Entrada registrada: '+eur(eBase(e)+eIva(e)))});lineTotals()}
+function formInsumo(i){i=i||{nombre:'',cat:'',unidad:'kg',stock:0,min:0,coste:'',iva:10};
+  modal(i.id?'Editar producto':'Nuevo producto de inventario',`<div class="form">
+   <label class="f">Nombre<input name="nombre" id="i_nombre" value="${esc(i.nombre)}"></label>
+   <div class="fg"><label class="f">Categoría<input name="cat" id="i_cat" list="dl_icat" value="${esc(i.cat)}" placeholder="Lácteos"></label>${dlist('dl_icat',['Bebidas','Lácteos','Panadería','Frutas y verduras','Alimentación','Charcutería','Limpieza','Desechables',...S.insumos.map(x=>x.cat)])}
+   <label class="f">Unidad<select name="unidad" id="i_unidad">${opts(UNIDADES,i.unidad)}</select></label></div>
+   <div class="fg"><label class="f">Stock actual<input name="stock" id="i_stock" inputmode="decimal" value="${qn(i.stock)}"></label><label class="f">Stock mínimo<input name="min" id="i_min" inputmode="decimal" value="${qn(i.min)}"></label></div>
+   <div class="fg"><label class="f">Precio de compra sin IVA (€)<input name="coste" id="i_coste" inputmode="decimal" value="${i.coste!==''?String(i.coste).replace('.',','):''}"></label><label class="f">IVA de compra${ivaSel('iva',i.iva)}</label></div></div>`,{},f=>{
+   if(!f.nombre.trim())return ferr('Escribe el nombre del producto.');
+   const o={nombre:f.nombre.trim(),cat:f.cat.trim()||'Otros',unidad:f.unidad,stock:num(f.stock),min:num(f.min),coste:r2(num(f.coste)),iva:+f.iva};
+   if(i.id){const x=S.insumos.find(z=>z.id===i.id),d=o.stock-x.stock;if(d)S.movimientos.push({id:uid(),fecha:today(),hora:nowTime(),insumoId:x.id,nombre:o.nombre,tipo:d>0?'entrada':'salida',cant:Math.abs(d),motivo:'Ajuste de inventario'});Object.assign(x,o)}
+   else S.insumos.push({id:uid(),...o});toast('Producto guardado')})}
+function formSalida(id){
+  if(!S.insumos.length){toast('Aún no hay productos en el inventario');return}
+  modal('Registrar salida de inventario',`<div class="form">
+   <label class="f">Producto<select name="ins" id="s_ins">${S.insumos.map(i=>`<option value="${i.id}" ${i.id===id?'selected':''}>${esc(i.nombre)} · stock ${qn(i.stock)} ${esc(i.unidad)}</option>`).join('')}</select></label>
+   <div class="fg"><label class="f">Cantidad<input name="cant" id="s_cant" inputmode="decimal"></label><label class="f">Fecha<input type="date" name="fecha" id="s_fecha" value="${today()}"></label></div>
+   <label class="f">Motivo<select name="motivo" id="s_mot">${opts(['Consumo en barra','Consumo en cocina','Merma o caducado','Ajuste de inventario'])}</select></label></div>`,{submit:'Registrar salida'},f=>{
+   const i=S.insumos.find(x=>x.id===f.ins),c=num(f.cant);if(c<=0)return ferr('Indica una cantidad mayor que 0.');
+   if(c>i.stock)return ferr(`Solo hay ${qn(i.stock)} ${i.unidad} de ${i.nombre}. Revisa la cantidad.`);
+   i.stock=r2(i.stock-c);S.movimientos.push({id:uid(),fecha:f.fecha||today(),hora:nowTime(),insumoId:i.id,nombre:i.nombre,tipo:'salida',cant:c,motivo:f.motivo});toast('Salida registrada')})}
+function formGasto(g){g=g||{fecha:today(),concepto:'',cat:CAT_GASTO[0],base:'',iva:21,pago:'Transferencia'};
+  modal(g.id?'Editar gasto':'Añadir gasto',`<div class="form">
+   <div class="fg"><label class="f">Fecha<input type="date" name="fecha" id="g_fecha" value="${g.fecha}"></label><label class="f">Categoría<select name="cat" id="g_cat">${opts(CAT_GASTO,g.cat)}</select></label></div>
+   <label class="f">Concepto<input name="concepto" id="g_con" value="${esc(g.concepto)}" placeholder="Factura de luz de octubre"></label>
+   <div class="fg"><label class="f">Base imponible (€)<input name="base" id="g_base" inputmode="decimal" value="${g.base!==''?String(g.base).replace('.',','):''}" data-live="g"></label><label class="f">IVA${ivaSel('iva',g.iva)}</label></div>
+   <label class="f">Método de pago<select name="pago" id="g_pago">${opts(PAGO_GASTO,g.pago)}</select></label><div class="sumbox" id="gtot"></div></div>`,{},f=>{
+   if(!f.concepto.trim())return ferr('Escribe el concepto del gasto.');const b=num(f.base);if(b<=0)return ferr('Indica un importe mayor que 0.');
+   const o={fecha:f.fecha||today(),concepto:f.concepto.trim(),cat:f.cat,base:r2(b),iva:+f.iva,pago:f.pago};
+   if(g.id)Object.assign(S.gastos.find(x=>x.id===g.id),o);else S.gastos.push({id:uid(),...o});UI.gmes=ym(o.fecha);toast('Gasto guardado')});gastoTot()}
+function gastoTot(){const el=$('#gtot');if(!el)return;const b=num($('#g_base').value),i=+$('#iva').value;el.innerHTML=`<span>IVA: <b>${eur(b*i/100)}</b></span><span>Total: <b>${eur(b*(1+i/100))}</b></span>`}
+function formProv(p){p=p||{nombre:'',nif:'',tel:'',email:'',dir:'',productos:''};
+  modal(p.id?'Editar proveedor':'Nuevo proveedor',`<div class="form"><label class="f">Nombre<input name="nombre" id="p_nombre" value="${esc(p.nombre)}"></label>
+   <div class="fg"><label class="f">NIF/CIF<input name="nif" id="p_nif" value="${esc(p.nif)}"></label><label class="f">Teléfono<input name="tel" id="p_tel" inputmode="tel" value="${esc(p.tel)}"></label></div>
+   <label class="f">Correo electrónico<input name="email" id="p_email" type="email" value="${esc(p.email)}"></label><label class="f">Dirección<input name="dir" id="p_dir" value="${esc(p.dir)}"></label>
+   <label class="f">Productos que suministra<input name="productos" id="p_prod" value="${esc(p.productos)}"></label></div>`,{},f=>{
+   if(!f.nombre.trim())return ferr('Escribe el nombre del proveedor.');const o={nombre:f.nombre.trim(),nif:f.nif.trim(),tel:f.tel.trim(),email:f.email.trim(),dir:f.dir.trim(),productos:f.productos.trim()};
+   if(p.id)Object.assign(S.proveedores.find(x=>x.id===p.id),o);else S.proveedores.push({id:uid(),...o});toast('Proveedor guardado')})}
+
+/* ===================== Acciones ===================== */
+const A={
+  close:close_,
+  vtab:id=>{UI.vtab=id;render()}, mcat:id=>{UI.mcat=id;render()}, icat:id=>{UI.icat=id;render()}, gmes:id=>{UI.gmes=id;render()}, iper:id=>{UI.iper=id;render()},
+  vrange:id=>{[UI.vdesde,UI.vhasta]=per(id);render()},
+  addcart:id=>{const c=S.carta.find(x=>x.id===id),l=cart.find(x=>x.cid===id);if(l)l.cant++;else cart.push({cid:id,nombre:c.nombre,cant:1,precio:c.precio,iva:c.iva});render()},
+  cplus:id=>{cart.find(x=>x.cid===id).cant++;render()}, cminus:id=>{const l=cart.find(x=>x.cid===id);l.cant--;if(l.cant<=0)cart=cart.filter(x=>x!==l);render()},
+  clearcart:()=>{cart=[];render()},
+  cobrar:p=>{if(!cart.length)return;const v={id:uid(),fecha:today(),hora:nowTime(),items:cart.map(l=>({...l})),pago:p};v.consumo=consumo(v.items);
+    const low=[];v.consumo.forEach(u=>{const i=S.insumos.find(x=>x.id===u.insumoId);if(!i)return;const was=i.stock>=i.min;i.stock=Math.max(0,r4(i.stock-u.cant));if(was&&i.stock<i.min)low.push(i.nombre)});
+    movVentas(v,1);S.ventas.push(v);cart=[];save();render();toast(`Venta cobrada (${p}): ${eur(vTot(v))}`+(low.length?` · Stock bajo: ${low.join(', ')}`:''))},
+  delventa:id=>confirmar('Se borrará esta venta del historial y los ingredientes de su receta volverán al inventario.','Borrar venta',()=>{const v=S.ventas.find(x=>x.id===id);
+    (v.consumo||[]).forEach(u=>{const i=S.insumos.find(x=>x.id===u.insumoId);if(i)i.stock=r4(i.stock+u.cant)});movVentas(v,-1);S.ventas=S.ventas.filter(x=>x.id!==id);toast('Venta borrada')}),
+  newcarta:()=>formCarta(), editcarta:id=>formCarta({...S.carta.find(c=>c.id===id)}),
+  delcarta:id=>confirmar('Se quitará el producto de la carta. Las ventas ya registradas se mantienen.','Borrar producto',()=>{S.carta=S.carta.filter(c=>c.id!==id);cart=cart.filter(l=>l.cid!==id)}),
+  newentrada:()=>formEntrada(),
+  addline:()=>{$('#lines').insertAdjacentHTML('beforeend',lineRow());lineTotals()},
+  rmline:(id,b)=>{if($$('#lines .l-row').length>1)b.closest('.l-row').remove();lineTotals()},
+  estado:id=>{const e=S.entradas.find(x=>x.id===id);e.estado=ESTADOS[(ESTADOS.indexOf(e.estado)+1)%3];save();render()},
+  delentrada:id=>confirmar('Se borrará el albarán y se restará su mercancía del inventario.','Borrar entrada',()=>{const e=S.entradas.find(x=>x.id===id);
+    e.lineas.forEach(l=>{const i=S.insumos.find(x=>x.id===l.insumoId);if(i)i.stock=Math.max(0,r2(i.stock-l.cant))});S.entradas=S.entradas.filter(x=>x.id!==id);toast('Entrada borrada')}),
+  newinsumo:()=>formInsumo(), editinsumo:id=>formInsumo({...S.insumos.find(i=>i.id===id)}), newsalida:id=>formSalida(id),
+  delinsumo:id=>confirmar('Se borrará el producto del inventario y se quitará de las recetas donde aparezca.','Borrar producto',()=>{S.insumos=S.insumos.filter(i=>i.id!==id);S.carta.forEach(c=>c.receta=(c.receta||[]).filter(r=>r.insumoId!==id))}),
+  addrec:()=>{$('#recs').insertAdjacentHTML('beforeend',recRow());recCost()},
+  rmrec:(id,b)=>{b.closest('.r-row').remove();recCost()},
+  glang:id=>{UI.glang=id;try{localStorage.setItem(KEY+'_guia',id)}catch(e){}render()},
+  goto:id=>{const el=document.getElementById(id);el&&el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})},
+  newgasto:()=>formGasto(), editgasto:id=>formGasto({...S.gastos.find(g=>g.id===id)}),
+  delgasto:id=>confirmar('Se borrará este gasto.','Borrar gasto',()=>{S.gastos=S.gastos.filter(g=>g.id!==id);toast('Gasto borrado')}),
+  newprov:()=>formProv(), editprov:id=>formProv({...S.proveedores.find(p=>p.id===id)}),
+  delprov:id=>confirmar('Se borrará el proveedor. Sus albaranes se mantienen como «Sin proveedor».','Borrar proveedor',()=>{S.proveedores=S.proveedores.filter(p=>p.id!==id)}),
+  histprov:id=>{const p=S.proveedores.find(x=>x.id===id),es=S.entradas.filter(e=>e.proveedorId===id).sort((a,b)=>b.fecha.localeCompare(a.fecha)).slice(0,30);
+    modal('Historial · '+p.nombre,`<div class="tbl"><table><thead><tr><th>Fecha</th><th>Albarán</th><th class="n">Total</th><th>Estado</th></tr></thead><tbody>${es.length?es.map(e=>`<tr><td>${fdate(e.fecha)}</td><td>${esc(e.albaran)}</td><td class="n">${eur(eBase(e)+eIva(e))}</td><td>${e.estado}</td></tr>`).join(''):'<tr><td colspan="4"><div class="empty">Sin compras registradas.</div></td></tr>'}</tbody></table></div>`,{wide:true})},
+  startfresh:()=>confirmar('Se borrarán todos los datos (ventas, compras, gastos, inventario y proveedores). Los datos del negocio se mantienen.','Borrar todo y empezar',()=>{const s=S.settings;S=blank();S.settings=s;cart=[];toast('Listo. Empieza añadiendo tu carta y tus productos.')}),
+  loadsample:()=>confirmar('Se sustituirán los datos actuales por datos de ejemplo.','Cargar ejemplo',()=>{const s=S.settings;S=seed();S.settings=s;cart=[];toast('Datos de ejemplo cargados')}),
+  export:()=>{try{const b=new Blob([JSON.stringify(S)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='contabilidad-cafeteria-'+today()+'.json';document.body.appendChild(a);a.click();a.remove();toast('Copia descargada')}catch(e){toast('No se pudo descargar. Usa «Copiar copia».')}},
+  copyexport:()=>{const t=JSON.stringify(S);navigator.clipboard.writeText(t).then(()=>toast('Copia copiada al portapapeles. Pégala en un archivo de texto.'),()=>toast('No se pudo copiar en este navegador.'))},
+  import:()=>$('#fileimp').click()
+};
+document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act;if(A[a]){e.preventDefault();A[a](b.dataset.id,b,e)}});
+document.addEventListener('input',e=>{const t=e.target;
+  if(t.id==='iq'){const q=t.value.trim().toLowerCase();$$('#itbody tr[data-name]').forEach(r=>r.hidden=q&&!r.dataset.name.includes(q))}
+  if(t.closest('#lines'))lineTotals(); if(t.id==='g_base')gastoTot(); if(t.closest('#recs')||t.id==='f_precio')recCost()});
+document.addEventListener('change',e=>{const t=e.target;
+  if(t.classList.contains('l-ins')){const i=S.insumos.find(x=>x.id===t.value),r=t.closest('.l-row');if(i){r.querySelector('.l-p').value=String(i.coste).replace('.',',');r.querySelector('.l-i').value=i.iva}lineTotals()}
+  if(t.classList.contains('l-i'))lineTotals(); if(t.classList.contains('r-ins')){const i=S.insumos.find(x=>x.id===t.value);t.closest('.r-row').querySelector('.r-u').textContent=i?rUnit(i.unidad):'';recCost()} if(t.closest('#mbody')&&t.name==='iva'&&$('#recs'))recCost(); if(t.id==='iva'&&$('#gtot'))gastoTot();
+  if(t.id==='vdesde'||t.id==='vhasta'){UI[t.id]=t.value||today();if(UI.vdesde>UI.vhasta)[UI.vdesde,UI.vhasta]=[UI.vhasta,UI.vdesde];render()}});
+document.addEventListener('submit',e=>{if(e.target.id!=='cfgform')return;e.preventDefault();const f=Object.fromEntries(new FormData(e.target));
+  const ivas=[...new Set(String(f.ivas).split(/[;\s]+|,(?=\s*\d)/).map(x=>num(x)).filter(x=>x>=0&&x<100))].sort((a,b)=>b-a);
+  S.settings=Object.assign(S.settings,{nombre:f.nombre.trim(),nif:f.nif.trim(),direccion:f.direccion.trim(),ciudad:f.ciudad.trim(),pais:f.pais.trim(),ivas:ivas.length?ivas:[21,10,4,0],ivaCarta:num(f.ivaCarta)});save();render();toast('Configuración guardada')});
+$('#fileimp').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);
+  if(!o||!Array.isArray(o.ventas)||!Array.isArray(o.insumos))throw 0;S=o;cart=[];save();render();toast('Copia restaurada')}catch(x){toast('El archivo no es una copia válida de esta aplicación.')}};r.readAsText(f);e.target.value=''});
+
+load();render();
+</script>
