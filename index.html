@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Contabilidad Cafetería</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="author" content="Halyna Haidai (Галина Гайдай) · ai.lab.creative">
@@ -32,7 +37,10 @@
   --green:#5cc98a; --green-soft:#14352a; --amber:#e8b84a; --amber-soft:#3a2f12; --red:#f08270; --red-soft:#3d1d19;
   --shadow:0 1px 2px #0006, 0 6px 20px #0004; color-scheme:dark}
 
+[hidden]{display:none!important}
 html,body{height:100%}
+body{margin:0}
+img{max-width:100%}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45}
 *{box-sizing:border-box}
 button,input,select,textarea{font:inherit;color:inherit}
@@ -256,6 +264,9 @@ label.f{display:flex;flex-direction:column;gap:5px;font-size:13px;font-weight:60
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
+</head>
+<body>
+
 
 <div class="app">
   <aside class="side">
@@ -981,3 +992,6 @@ $('#fileimp').addEventListener('change',e=>{const f=e.target.files[0];if(!f)retu
 
 load();render();
 </script>
+
+</body>
+</html>
